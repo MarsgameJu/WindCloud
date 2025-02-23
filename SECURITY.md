@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-I Hope its Safe if not tell me pls
+We support the following versions with security updates:
 
 | Version   | Supported          |
 | --------- | ------------------ |
@@ -11,4 +11,4 @@ I Hope its Safe if not tell me pls
 
 ## Reporting a Vulnerability
 
-Create an Issue an write down the vulnability
+To report a vulnerability, please create an issue in this repository and provide detailed information about the vulnerability. Alternatively, you can send an email to [your-email@example.com] with the details.
