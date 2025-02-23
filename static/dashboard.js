@@ -375,37 +375,51 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             try {
+                console.log('Uploading files...', formData);
                 const response = await fetch(`/api/cards/${cardId}/files`, {
                     method: 'POST',
                     body: formData
                 });
 
-                if (!response.ok) throw new Error('Failed to upload files');
+                console.log('Upload response status:', response.status);
                 const data = await response.json();
+                console.log('Upload response data:', data);
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to upload files');
+                }
 
                 data.files.forEach(file => {
                     if (file.is_image) {
-                        const imageGallery = card.querySelector('.image-gallery');
-                        const template = document.getElementById('image-template');
-                        const imageElement = template.content.cloneNode(true);
-                        const imageItem = imageElement.querySelector('.image-item');
-                        
-                        imageItem.dataset.fileId = file.id;
-                        imageItem.querySelector('img').src = file.url;
-                        imageItem.querySelector('img').alt = file.name;
-                        
-                        imageGallery.appendChild(imageItem);
+                        const galleryGrid = card.querySelector('.gallery-grid');
+                        const imageElement = document.createElement('div');
+                        imageElement.className = 'gallery-item';
+                        imageElement.dataset.fileId = file.id;
+                        imageElement.innerHTML = `
+                            <img src="${file.url}" alt="${file.name}" onclick="showImagePreview('${file.url}')">
+                            <button class="delete-file" title="Delete file">
+                                <span class="material-icons">delete</span>
+                            </button>
+                        `;
+                        galleryGrid.appendChild(imageElement);
                     } else {
-                        const fileList = card.querySelector('.file-list');
-                        const template = document.getElementById('file-template');
-                        const fileElement = template.content.cloneNode(true);
-                        const fileItem = fileElement.querySelector('.file-item');
-                        
-                        fileItem.dataset.fileId = file.id;
-                        fileItem.dataset.url = file.url;
-                        fileItem.querySelector('.file-name').textContent = file.name;
-                        
-                        fileList.appendChild(fileItem);
+                        const filesList = card.querySelector('.files-list');
+                        const fileElement = document.createElement('div');
+                        fileElement.className = 'file-item';
+                        fileElement.dataset.fileId = file.id;
+                        fileElement.dataset.url = file.url;
+                        fileElement.innerHTML = `
+                            <span class="file-name">${file.name}</span>
+                            <div class="file-actions">
+                                <button class="download-file" title="Download file">
+                                    <span class="material-icons">download</span>
+                                </button>
+                                <button class="delete-file" title="Delete file">
+                                    <span class="material-icons">delete</span>
+                                </button>
+                            </div>
+                        `;
+                        filesList.appendChild(fileElement);
                     }
                 });
 
@@ -458,37 +472,51 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             try {
+                console.log('Uploading files...', formData);
                 const response = await fetch(`/api/cards/${cardId}/files`, {
                     method: 'POST',
                     body: formData
                 });
 
-                if (!response.ok) throw new Error('Failed to upload files');
+                console.log('Upload response status:', response.status);
                 const data = await response.json();
+                console.log('Upload response data:', data);
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to upload files');
+                }
 
                 data.files.forEach(file => {
                     if (file.is_image) {
-                        const imageGallery = card.querySelector('.image-gallery');
-                        const template = document.getElementById('image-template');
-                        const imageElement = template.content.cloneNode(true);
-                        const imageItem = imageElement.querySelector('.image-item');
-                        
-                        imageItem.dataset.fileId = file.id;
-                        imageItem.querySelector('img').src = file.url;
-                        imageItem.querySelector('img').alt = file.name;
-                        
-                        imageGallery.appendChild(imageItem);
+                        const galleryGrid = card.querySelector('.gallery-grid');
+                        const imageElement = document.createElement('div');
+                        imageElement.className = 'gallery-item';
+                        imageElement.dataset.fileId = file.id;
+                        imageElement.innerHTML = `
+                            <img src="${file.url}" alt="${file.name}" onclick="showImagePreview('${file.url}')">
+                            <button class="delete-file" title="Delete file">
+                                <span class="material-icons">delete</span>
+                            </button>
+                        `;
+                        galleryGrid.appendChild(imageElement);
                     } else {
-                        const fileList = card.querySelector('.file-list');
-                        const template = document.getElementById('file-template');
-                        const fileElement = template.content.cloneNode(true);
-                        const fileItem = fileElement.querySelector('.file-item');
-                        
-                        fileItem.dataset.fileId = file.id;
-                        fileItem.dataset.url = file.url;
-                        fileItem.querySelector('.file-name').textContent = file.name;
-                        
-                        fileList.appendChild(fileItem);
+                        const filesList = card.querySelector('.files-list');
+                        const fileElement = document.createElement('div');
+                        fileElement.className = 'file-item';
+                        fileElement.dataset.fileId = file.id;
+                        fileElement.dataset.url = file.url;
+                        fileElement.innerHTML = `
+                            <span class="file-name">${file.name}</span>
+                            <div class="file-actions">
+                                <button class="download-file" title="Download file">
+                                    <span class="material-icons">download</span>
+                                </button>
+                                <button class="delete-file" title="Delete file">
+                                    <span class="material-icons">delete</span>
+                                </button>
+                            </div>
+                        `;
+                        filesList.appendChild(fileElement);
                     }
                 });
             } catch (error) {

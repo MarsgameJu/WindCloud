@@ -83,12 +83,14 @@ def create_cards_table():
         )
     """)
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS card_files (
+        CREATE TABLE IF NOT EXISTS files (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             card_id INTEGER NOT NULL,
-            filename TEXT NOT NULL,
-            file_path TEXT NOT NULL,
-            file_type TEXT NOT NULL,
+            name TEXT NOT NULL,
+            path TEXT NOT NULL,
+            type TEXT NOT NULL,
+            size INTEGER NOT NULL,
+            is_image INTEGER NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (card_id) REFERENCES cards (id) ON DELETE CASCADE
         )
@@ -326,14 +328,14 @@ def manage_card(card_id):
 
         if request.method == "DELETE":
             # Delete associated files first
-            cursor.execute("SELECT filename FROM card_files WHERE card_id = ?", (card_id,))
+            cursor.execute("SELECT filename FROM files WHERE card_id = ?", (card_id,))
             files = cursor.fetchall()
             for file in files:
                 file_path = os.path.join(app.config["UPLOAD_FOLDER"], file[0])
                 if os.path.exists(file_path):
                     os.remove(file_path)
             
-            cursor.execute("DELETE FROM card_files WHERE card_id = ?", (card_id,))
+            cursor.execute("DELETE FROM files WHERE card_id = ?", (card_id,))
             cursor.execute("DELETE FROM card_shares WHERE card_id = ?", (card_id,))
             cursor.execute("DELETE FROM cards WHERE id = ?", (card_id,))
             conn.commit()
@@ -368,6 +370,7 @@ def upload_files(card_id):
         card = cursor.fetchone()
 
         if not card:
+            print(f"Card not found: {card_id}")  # Debug log
             return {"error": "Card not found"}, 404
         
         # Check if user has permission
@@ -378,14 +381,17 @@ def upload_files(card_id):
             )
             share = cursor.fetchone()
             if not share or share[0] != "write":
+                print(f"Permission denied for user {session['user_id']} on card {card_id}")  # Debug log
                 return {"error": "Permission denied"}, 403
 
         if "files[]" not in request.files:
+            print("No files provided in request")  # Debug log
             return {"error": "No files provided"}, 400
 
         files = request.files.getlist("files[]")
         file_type = request.form.get("type", "file")
         uploaded_files = []
+        print(f"Received {len(files)} files for upload")  # Debug log
 
         for file in files:
             if file and allowed_file(file.filename):
@@ -396,27 +402,39 @@ def upload_files(card_id):
                 filename = f"{name}_{int(time.time())}{ext}"
                 
                 file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+                print(f"Saving file to: {file_path}")  # Debug log
                 file.save(file_path)
 
-                # Create file record
-                cursor.execute(
-                    "INSERT INTO card_files (card_id, filename, original_name, is_image) VALUES (?, ?, ?, ?)",
-                    (card_id, filename, secure_filename(file.filename), file_type == "image")
-                )
-                file_id = cursor.lastrowid
-                
-                uploaded_files.append({
-                    "id": file_id,
-                    "name": secure_filename(file.filename),
-                    "url": url_for("uploaded_file", filename=filename),
-                    "is_image": file_type == "image"
-                })
+                try:
+                    # Get file size
+                    file_size = os.path.getsize(file_path)
+                    
+                    # Create file record
+                    cursor.execute(
+                        "INSERT INTO files (card_id, name, path, type, size, is_image) VALUES (?, ?, ?, ?, ?, ?)",
+                        (card_id, secure_filename(file.filename), file_path, file_type, file_size, file_type == "image")
+                    )
+                    file_id = cursor.lastrowid
+                    print(f"File record created with ID: {file_id}")  # Debug log
+                    
+                    uploaded_files.append({
+                        "id": file_id,
+                        "name": secure_filename(file.filename),
+                        "url": f"/uploads/{filename}",
+                        "is_image": file_type == "image"
+                    })
+                except sqlite3.Error as e:
+                    print(f"Database error: {str(e)}")  # Debug log
+                    raise
 
         conn.commit()
+        print(f"Successfully uploaded {len(uploaded_files)} files")  # Debug log
         return {"files": uploaded_files}
 
     except Exception as e:
-        conn.rollback()
+        print(f"Error in upload_files: {str(e)}")  # Debug log
+        if conn:
+            conn.rollback()
         return {"error": str(e)}, 500
 
 @app.route("/api/cards/<int:card_id>/files/<int:file_id>", methods=["DELETE"])
@@ -444,7 +462,7 @@ def delete_file(card_id, file_id):
                 return {"error": "Permission denied"}, 403
 
         # Get file info
-        cursor.execute("SELECT filename FROM card_files WHERE id = ? AND card_id = ?", (file_id, card_id))
+        cursor.execute("SELECT name FROM files WHERE id = ? AND card_id = ?", (file_id, card_id))
         file = cursor.fetchone()
 
         if not file:
@@ -456,7 +474,7 @@ def delete_file(card_id, file_id):
             os.remove(file_path)
 
         # Delete the database record
-        cursor.execute("DELETE FROM card_files WHERE id = ?", (file_id,))
+        cursor.execute("DELETE FROM files WHERE id = ?", (file_id,))
         conn.commit()
         return {"message": "File deleted successfully"}
 
@@ -514,11 +532,17 @@ def share_card(card_id):
         conn.rollback()
         return {"error": str(e)}, 500
 
-# Serve uploaded files
-@app.route("/uploads/<filename>")
+@app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
     """Serve uploaded files"""
-    return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
+    try:
+        return send_file(
+            os.path.join(app.config['UPLOAD_FOLDER'], filename),
+            as_attachment=False
+        )
+    except Exception as e:
+        print(f"Error serving file {filename}: {str(e)}")
+        return {"error": "File not found"}, 404
 
 @app.route("/logout")
 def logout():
