@@ -168,9 +168,42 @@ body {
 
 .cards-container.grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    padding: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.cards-container.grid .card {
+    height: auto;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    max-height: none;
+}
+
+.cards-container.grid .card-content {
+    flex: 0 0 auto;
+}
+
+.cards-container.grid .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+    padding: 8px;
+    max-height: none;
+    overflow-y: visible;
+}
+
+.cards-container.grid .files-list {
+    max-height: none;
+    overflow-y: visible;
+    padding: 8px;
+}
+
+.cards-container.grid .card-files,
+.cards-container.grid .card-gallery {
+    margin-top: 16px;
 }
 
 .cards-container.list {
@@ -194,7 +227,7 @@ body {
     margin: 0;
     height: fit-content;
     min-height: 200px;
-    max-height: 400px;
+    max-height: none;
 }
 
 .cards-container.grid .card.editing {
@@ -325,12 +358,14 @@ body {
 
 .gallery-item {
     position: relative;
-    aspect-ratio: 1;
-    border-radius: 4px;
+    padding-bottom: 100%;
     overflow: hidden;
 }
 
 .gallery-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -1126,7 +1161,8 @@ body.dark-mode .files-section h4 {
 /* Share Modal Styles */
 #share-modal .modal-content {
     max-width: 480px;
-    padding: 2rem;
+    width: 90%;
+    padding: 20px;
 }
 
 #share-modal .modal-title {
@@ -1150,19 +1186,26 @@ body.dark-mode .files-section h4 {
 
 #share-modal input[type="email"] {
     width: 100%;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
+    max-width: 100%;
+    padding: 8px;
     border: 1px solid var(--border-color);
-    background: var(--background-color);
-    color: var(--text-color);
-    font-size: 1rem;
-    transition: all 0.2s;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
 #share-modal input[type="email"]:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+}
+
+#share-modal select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
 }
 
 #share-modal .permission-options {

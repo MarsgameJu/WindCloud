@@ -280,14 +280,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 try {
                     const cardId = card.dataset.cardId;
                     const response = await fetch(`/api/cards/${cardId}`, {
-                        method: 'DELETE'
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
                     });
                     
-                    if (!response.ok) throw new Error('Failed to delete card');
-                    card.remove();
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || 'Failed to delete card');
+                    }
+                    
+                    const data = await response.json();
+                    if (data.message === "Card deleted successfully") {
+                        card.remove();
+                    } else {
+                        throw new Error('Unexpected response from server');
+                    }
                 } catch (error) {
                     console.error('Error deleting card:', error);
-                    alert('Failed to delete card. Please try again.');
+                    alert(`Failed to delete card: ${error.message}`);
                 }
             }
         } else if (removeFileBtn) {
@@ -342,6 +354,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const title = card.querySelector('.card-title');
         const description = card.querySelector('.card-description');
         const editButton = card.querySelector('.edit-card');
+        const editIcon = editButton.querySelector('.material-icons');
         
         if (isEditing) {
             // Store original values
@@ -354,7 +367,7 @@ document.addEventListener('DOMContentLoaded', function() {
             title.focus();
             
             // Change edit button icon
-            editButton.querySelector('.material-icons').textContent = 'save';
+            editIcon.textContent = 'save';
             
             // Show delete buttons
             card.querySelectorAll('.delete-file.edit-only').forEach(button => {
@@ -363,6 +376,13 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // Save changes
             saveCardChanges(card);
+            
+            // Reset edit button icon
+            editIcon.textContent = 'edit';
+            
+            // Make elements non-editable
+            title.contentEditable = false;
+            description.contentEditable = false;
             
             // Hide delete buttons
             card.querySelectorAll('.delete-file.edit-only').forEach(button => {

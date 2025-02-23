@@ -307,9 +307,14 @@ def create_card():
 @app.route("/api/cards/<int:card_id>", methods=["PUT", "DELETE"])
 def manage_card(card_id):
     """Update or delete a card"""
+    if "user_id" not in session:
+        return {"error": "Not authenticated"}, 401
+        
     try:
         conn = get_db()
         cursor = conn.cursor()
+        
+        # Check if card exists
         cursor.execute("SELECT user_id FROM cards WHERE id = ?", (card_id,))
         card = cursor.fetchone()
 
@@ -327,20 +332,33 @@ def manage_card(card_id):
                 return {"error": "Permission denied"}, 403
 
         if request.method == "DELETE":
-            # Delete associated files first
-            cursor.execute("SELECT filename FROM files WHERE card_id = ?", (card_id,))
-            files = cursor.fetchall()
-            for file in files:
-                file_path = os.path.join(app.config["UPLOAD_FOLDER"], file[0])
-                if os.path.exists(file_path):
-                    os.remove(file_path)
-            
-            cursor.execute("DELETE FROM files WHERE card_id = ?", (card_id,))
-            cursor.execute("DELETE FROM card_shares WHERE card_id = ?", (card_id,))
-            cursor.execute("DELETE FROM cards WHERE id = ?", (card_id,))
-            conn.commit()
-            return {"message": "Card deleted successfully"}
-
+            try:
+                # Delete associated files first
+                cursor.execute("SELECT name, path FROM files WHERE card_id = ?", (card_id,))
+                files = cursor.fetchall()
+                
+                # Delete physical files
+                for file in files:
+                    file_path = os.path.join(app.config["UPLOAD_FOLDER"], file[1])  # Using path instead of name
+                    if os.path.exists(file_path):
+                        try:
+                            os.remove(file_path)
+                        except OSError as e:
+                            print(f"Error deleting file {file_path}: {e}")
+                            # Continue even if file deletion fails
+                
+                # Delete database records
+                cursor.execute("DELETE FROM files WHERE card_id = ?", (card_id,))
+                cursor.execute("DELETE FROM card_shares WHERE card_id = ?", (card_id,))
+                cursor.execute("DELETE FROM cards WHERE id = ?", (card_id,))
+                conn.commit()
+                
+                return {"message": "Card deleted successfully"}
+                
+            except Exception as e:
+                conn.rollback()
+                print(f"Error during card deletion: {str(e)}")
+                return {"error": f"Database error: {str(e)}"}, 500
         elif request.method == "PUT":
             data = request.get_json()
             title = data.get("title")
