@@ -291,7 +291,7 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) file for 
 ### Getting Help
 
 1. **Documentation**
-   - Review [FAQ](faq)
+   - Review [FAQ](/discussions/categories/q-a)
    - Search existing issues
 
 2. **Community Support**
