@@ -251,25 +251,39 @@
             <h2 class="modal-title">Share Card</h2>
             <form id="share-form">
                 <div class="form-group">
-                    <label for="share-email">Email:</label>
-                    <input type="email" id="share-email" name="email" required>
+                    <label for="share-email">Share with (email address):</label>
+                    <input type="email" id="share-email" name="email" required placeholder="Enter email address">
                 </div>
                 <div class="form-group">
-                    <label>Permission:</label>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio" name="permission" value="read" checked>
-                            Read Only
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="permission" value="write">
-                            Read & Write
-                        </label>
+                    <label>Access Level:</label>
+                    <div class="permission-options">
+                        <div class="permission-option">
+                            <input type="radio" name="permission" value="read" id="permission-read" checked>
+                            <label for="permission-read">
+                                <span class="material-icons">visibility</span>
+                                <span class="text">Read Only</span>
+                                <span class="description">Can view but not modify</span>
+                            </label>
+                        </div>
+                        <div class="permission-option">
+                            <input type="radio" name="permission" value="write" id="permission-write">
+                            <label for="permission-write">
+                                <span class="material-icons">edit</span>
+                                <span class="text">Read & Write</span>
+                                <span class="description">Can view and modify</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-actions">
-                    <button type="button" class="btn cancel-button">Cancel</button>
-                    <button type="submit" class="btn submit-button">Share</button>
+                    <button type="button" class="btn cancel-button">
+                        <span class="material-icons">close</span>
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn submit-button">
+                        <span class="material-icons">share</span>
+                        Share
+                    </button>
                 </div>
             </form>
         </div>
