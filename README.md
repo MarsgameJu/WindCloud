@@ -123,7 +123,7 @@ WindCloud/
 ├── app.py                  # Main application
 ├── config.py               # Configuration
 └── requirements.txt        # Dependencies
-
+```
 ## 💡 Feature Details
 
 ### Dashboard
@@ -311,5 +311,8 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) file for 
 ---
 
 ## 🔄 Version History
+**Coming Soon**
+
+---
 
 Built with ❤️ by Marsgame
