@@ -1,0 +1,46 @@
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS cards;
+DROP TABLE IF EXISTS files;
+DROP TABLE IF EXISTS shared_cards;
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    totp_secret TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE cards (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE files (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    card_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    path TEXT NOT NULL,
+    type TEXT NOT NULL,
+    size INTEGER NOT NULL,
+    is_image BOOLEAN NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (card_id) REFERENCES cards (id) ON DELETE CASCADE
+);
+
+CREATE TABLE shared_cards (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    card_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    permission TEXT NOT NULL CHECK (permission IN ('read', 'write')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (card_id) REFERENCES cards (id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    UNIQUE(card_id, user_id)
+);

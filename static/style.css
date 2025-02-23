@@ -1,0 +1,323 @@
+/* Reset der Basis-Stile */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+}
+
+/* Container für Formulare */
+.container {
+    background-color: #1f1f1f;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.container:hover {
+    transform: scale(1.02);
+}
+
+h1 {
+    font-size: 2.2em;
+    color: #ffffff;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Eingabefelder */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    font-size: 1em;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="text"]:focus {
+    border-color: #3f9af4;
+    box-shadow: 0 0 8px rgba(63, 154, 244, 0.6);
+}
+
+/* Submit Button */
+input[type="submit"] {
+    background-color: #3f9af4;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 1.2em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #3578e5;
+}
+
+/* Flash-Meldungen */
+.flash-message {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 6px;
+    font-weight: 500;
+    color: white;
+    background-color: #f44336; /* Standard: Rot für Fehler */
+}
+
+.flash-message.success {
+    background-color: #4caf50; /* Grün für Erfolg */
+}
+
+.flash-message.danger {
+    background-color: #f44336; /* Rot für Fehler */
+}
+
+/* QR-Code Container für 2FA */
+.qr-code-container {
+    margin-top: 20px;
+    background-color: #2c2c2c;
+    border-radius: 10px;
+    padding: 25px;
+    text-align: center;
+}
+
+.qr-code-container img {
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Text-Link Styles */
+a {
+    color: #3f9af4;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #bbb;
+}
+
+/* Kleine Anpassungen für mobile Geräte */
+@media (max-width: 600px) {
+    body {
+        padding: 0 15px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    input[type="submit"] {
+        font-size: 1em;
+    }
+}
+
+.qr-code img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.auth-form label {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.auth-form input {
+    padding: 10px;
+    font-size: 16px;
+    width: 80%;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    background-color: #222;
+    color: #fff;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.auth-form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.auth-form button:hover {
+    background-color: #45a049;
+}
+
+.auth-form button:active {
+    background-color: #388e3c;
+}
+
+/* Flash-Benachrichtigungen */
+.alert-success {
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.alert-info {
+    background-color: #17a2b8;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.alert-warning {
+    background-color: #ffc107;
+    color: black;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.flashes {
+    position: fixed;    
+    top: 20px;
+    right: 20px;
+    z-index: 9999; 
+    width: auto;
+    max-width: 400px;
+    margin: 0;  
+}
+
+
+.flashes .alert {
+    margin: 5px 0;
+}
+
+input[type="password"],
+input[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+    font-size: 1em;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+input[type="password"]:focus,
+input[type="submit"]:focus {
+    border-color: #3f9af4;
+    box-shadow: 0 0 8px rgba(63, 154, 244, 0.6);
+}
+
+.password-strength-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #555;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.password-progress {
+    height: 100%;
+    width: 0;
+    background-color: #ff4c4c;
+    border-radius: 5px;
+}
+
+.password-requirements {
+    text-align: left;
+    margin-bottom: 20px;
+    color: #ddd;
+}
+
+.requirement {
+    font-size: 14px;
+    color: #ccc;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.requirement input {
+    margin-right: 10px;
+    accent-color: #3f9af4;
+}
+
+.requirement.fulfilled {
+    color: #4caf50;
+    text-decoration: line-through;
+}
+
+input[type="submit"] {
+    background-color: #3f9af4;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 1.2em;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #3578e5;
+}
+

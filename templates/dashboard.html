@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SafeLogin</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body class="dark-mode">
+    <header class="dashboard-header">
+        <div class="header-left">
+            <h1 class="header-title">Dashboard</h1>
+            <div class="search-container">
+                <span class="material-icons">search</span>
+                <input type="search" placeholder="Search cards...">     <!-- type="text falls komisch aussieht" -->
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="action-button" id="new-card-button">
+                <span class="material-icons">add</span>
+                New Card
+            </button>
+            <button class="card-action-button" id="view-toggle">
+                <span class="material-icons">grid_view</span>
+            </button>
+            <button class="card-action-button" id="theme-toggle">
+                <span class="material-icons">dark_mode</span>
+            </button>
+            <div class="profile-menu">
+                <button class="profile-button">
+                    <span class="material-icons">account_circle</span>
+                    <span>{{ current_user.username }}</span>
+                </button>
+                <div class="profile-menu-content">
+                    <a href="/profile" class="profile-menu-item">
+                        <span class="material-icons">person</span>
+                        Profile
+                    </a>
+                    <a href="/logout" class="profile-menu-item">
+                        <span class="material-icons">logout</span>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-content">
+        <div class="cards-container list">
+            {% for card in cards %}
+            <div class="card" data-card-id="{{ card.id }}">
+                <div class="card-content">
+                    <h3 class="card-title" contenteditable="false">{{ card.title }}</h3>
+                    <p class="card-description" contenteditable="false">{{ card.description }}</p>
+                    
+                    <div class="gallery-section">
+                        <h4>Gallery</h4>
+                        <div class="image-gallery">
+                            {% for file in card.images %}
+                            <div class="image-item" data-file-id="{{ file.id }}">
+                                <img src="{{ file.url }}" alt="Card Image">
+                                <div class="file-actions">
+                                    <button class="btn download-btn">
+                                        <span class="material-icons">download</span>
+                                        Download
+                                    </button>
+                                    <button class="btn btn-danger remove-file">
+                                        <span class="material-icons">delete</span>
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="upload-area" data-type="image">
+                            <span class="material-icons">add_photo_alternate</span>
+                            <p>Click or drag images here</p>
+                            <input type="file" multiple accept="image/*" class="file-input" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="files-section">
+                        <h4>Files</h4>
+                        <div class="file-list">
+                            {% for file in card.files %}
+                            {% if not file.is_image %}
+                            <div class="file-item" data-file-id="{{ file.id }}">
+                                <span class="material-icons file-icon">description</span>
+                                <span class="file-name">{{ file.name }}</span>
+                                <div class="file-actions">
+                                    <button class="btn download-btn">
+                                        <span class="material-icons">download</span>
+                                        Download
+                                    </button>
+                                    <button class="btn btn-danger remove-file">
+                                        <span class="material-icons">delete</span>
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="upload-area" data-type="file">
+                            <span class="material-icons">upload_file</span>
+                            <p>Click or drag files here</p>
+                            <input type="file" multiple accept=".pdf,.doc,.docx,.txt" class="file-input" style="display: none;">
+                        </div>
+                    </div>
+
+                    <div class="card-actions">
+                        <button class="btn btn-primary edit-card">
+                            <span class="material-icons">edit</span>
+                            Edit
+                        </button>
+                        <button class="btn btn-secondary share-card">
+                            <span class="material-icons">share</span>
+                            Share
+                        </button>
+                        <button class="btn btn-danger delete-card">
+                            <span class="material-icons">delete</span>
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <div class="modal" id="new-card-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">New Card</h2>
+            <form id="new-card-form">
+                <div class="form-group">
+                    <label for="card-title">Title</label>
+                    <input type="text" id="card-title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-description">Description</label>
+                    <textarea id="card-description" name="description" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Card</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Card Template -->
+    <template id="card-template">
+        <div class="card" data-card-id="">
+            <div class="card-content">
+                <h3 class="card-title" contenteditable="false"></h3>
+                <p class="card-description" contenteditable="false"></p>
+                
+                <div class="gallery-section">
+                    <h4>Gallery</h4>
+                    <div class="image-gallery">
+                        <!-- Images will be added here -->
+                    </div>
+                    <div class="upload-area" data-type="image">
+                        <span class="material-icons">add_photo_alternate</span>
+                        <p>Click or drag images here</p>
+                        <input type="file" multiple accept="image/*" class="file-input" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="files-section">
+                    <h4>Files</h4>
+                    <div class="file-list">
+                        <!-- Files will be added here -->
+                    </div>
+                    <div class="upload-area" data-type="file">
+                        <span class="material-icons">upload_file</span>
+                        <p>Click or drag files here</p>
+                        <input type="file" multiple accept=".pdf,.doc,.docx,.txt" class="file-input" style="display: none;">
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <button class="btn btn-primary edit-card">
+                        <span class="material-icons">edit</span>
+                        Edit
+                    </button>
+                    <button class="btn btn-secondary share-card">
+                        <span class="material-icons">share</span>
+                        Share
+                    </button>
+                    <button class="btn btn-danger delete-card">
+                        <span class="material-icons">delete</span>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Image Template -->
+    <template id="image-template">
+        <div class="image-item" data-file-id="">
+            <img src="" alt="Card Image">
+            <div class="file-actions">
+                <button class="btn download-btn">
+                    <span class="material-icons">download</span>
+                    Download
+                </button>
+                <button class="btn btn-danger remove-file">
+                    <span class="material-icons">delete</span>
+                    Remove
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <!-- File Template -->
+    <template id="file-template">
+        <div class="file-item" data-file-id="">
+            <span class="material-icons file-icon">description</span>
+            <span class="file-name"></span>
+            <div class="file-actions">
+                <button class="btn download-btn">
+                    <span class="material-icons">download</span>
+                    Download
+                </button>
+                <button class="btn btn-danger remove-file">
+                    <span class="material-icons">delete</span>
+                    Remove
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Confirm Modal -->
+    <div class="modal" id="confirm-modal">
+        <div class="modal-content">
+            <h2 class="modal-title"></h2>
+            <p class="modal-message"></p>
+            <div class="modal-actions">
+                <button class="btn cancel-button">Cancel</button>
+                <button class="btn confirm-button">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal" id="share-modal">
+        <div class="modal-content">
+            <h2 class="modal-title">Share Card</h2>
+            <form id="share-form">
+                <div class="form-group">
+                    <label for="share-email">Email:</label>
+                    <input type="email" id="share-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Permission:</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="permission" value="read" checked>
+                            Read Only
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="permission" value="write">
+                            Read & Write
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn cancel-button">Cancel</button>
+                    <button type="submit" class="btn submit-button">Share</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div class="modal image-modal">
+        <span class="close-button material-icons">close</span>
+        <img src="" alt="Full size image">
+    </div>
+
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

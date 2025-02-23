@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrierung</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="flashes">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>      
+    <div class="container">
+        <h1>Registriere dich</h1>
+        <form method="POST" action="{{ url_for('register') }}" id="password-form">
+            <input type="text" name="username" placeholder="Benutzername" required>
+            <input type="email" name="email" placeholder="E-Mail" required>    
+
+            <input type="password" id="password" name="password" placeholder="Passwort" required>
+
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Passwort bestätigen" required>
+
+            <div id="password-strength-bar" class="password-strength-bar">
+                <div id="password-progress" class="password-progress"></div>
+            </div>
+
+            <div id="password-requirements" class="password-requirements">
+                <ul>
+                    <li id="length" class="requirement">
+                        <input type="checkbox" id="check-length" disabled>
+                        <label for="check-length">Mindestens 8 Zeichen</label>
+                    </li>
+                    <li id="number" class="requirement">
+                        <input type="checkbox" id="check-number" disabled>
+                        <label for="check-number">Mindestens eine Zahl oder Sonderzeichen</label>
+                    </li>
+                    <li id="case" class="requirement">
+                        <input type="checkbox" id="check-case" disabled>
+                        <label for="check-case">Groß- und Kleinbuchstaben</label>
+                    </li>
+                </ul>
+            </div>
+
+            <input type="submit" id="submit-btn" value="Registrieren" disabled>
+        </form>
+
+        <p>Bereits registriert? <a href="{{ url_for('login') }}">Einloggen</a></p>
+    </div>
+
+    <script src="{{ url_for('static', filename='flash-message.js') }}"></script>
+    <script src="{{ url_for('static', filename='password-check.js') }}"></script>    
+</body>
+</html>
