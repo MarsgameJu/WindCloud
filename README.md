@@ -78,26 +78,26 @@ python app.py
 
 ```
 SafeLogin/
-├── database/                # Database files
-│   └── users.db            # SQLite database
-├── static/                 # Static files
+├── database/              # Database files
+│   └── users.db           # SQLite database
+├── static/                # Static files
 │   ├── style.css          # Base styling
 │   ├── dashboard.css      # Dashboard-specific styling
 │   ├── dashboard.js       # Dashboard functionality
 │   ├── flash-message.js   # Flash messages
 │   └── password-check.js  # Password validation
 ├── templates/             # HTML templates
-│   ├── login.html        # Login page
-│   ├── register.html     # Registration
-│   ├── 2fa.html         # 2FA verification
-│   └── dashboard.html    # Main dashboard
-├── uploads/              # Uploaded files
-├── utils/               # Helper functions
-│   ├── database.py     # Database connection
-│   └── security.py     # Security functions
-├── app.py              # Main application
-├── config.py           # Configuration
-└── requirements.txt    # Dependencies
+│   ├── login.html         # Login page
+│   ├── register.html      # Registration
+│   ├── 2fa.html           # 2FA verification
+│   └── dashboard.html     # Main dashboard
+├── uploads/               # Uploaded files
+├── utils/                 # Helper functions
+│   ├── database.py        # Database connection
+│   └── security.py        # Security functions
+├── app.py                 # Main application
+├── config.py              # Configuration
+└── requirements.txt       # Dependencies
 ```
 
 ## 💡 Feature Details

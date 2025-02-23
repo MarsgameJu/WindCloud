@@ -290,9 +290,17 @@
     </div>
 
     <!-- Image Preview Modal -->
-    <div class="modal image-modal">
-        <span class="close-button material-icons">close</span>
-        <img src="" alt="Full size image">
+    <div id="image-modal" class="modal">
+        <button class="prev-image nav-button">
+            <span class="material-icons">chevron_left</span>
+        </button>
+        <img class="modal-image" src="" alt="Preview">
+        <button class="next-image nav-button">
+            <span class="material-icons">chevron_right</span>
+        </button>
+        <button class="close-modal">
+            <span class="material-icons">close</span>
+        </button>
     </div>
 
     <script src="{{ url_for('static', filename='dashboard.js') }}"></script>

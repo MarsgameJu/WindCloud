@@ -1,3 +1,64 @@
+    // Image preview function
+function showImagePreview(imageUrl, galleryGrid) {
+    const imageModal = document.getElementById('image-modal');
+    const modalImage = imageModal.querySelector('.modal-image');
+    const prevButton = imageModal.querySelector('.prev-image');
+    const nextButton = imageModal.querySelector('.next-image');
+    const closeButton = imageModal.querySelector('.close-modal');
+    
+    // Get all images in the current gallery
+    const allImages = Array.from(galleryGrid.querySelectorAll('.gallery-item img'));
+    const currentIndex = allImages.findIndex(img => img.src === imageUrl);
+    
+    // Show/hide navigation buttons based on position
+    prevButton.style.display = currentIndex > 0 ? 'flex' : 'none';
+    nextButton.style.display = currentIndex < allImages.length - 1 ? 'flex' : 'none';
+    
+    // Update image source
+    modalImage.src = imageUrl;
+    imageModal.classList.add('active');
+    
+    // Navigation function
+    function navigateImage(direction) {
+        const newIndex = currentIndex + direction;
+        if (newIndex >= 0 && newIndex < allImages.length) {
+            const newImage = allImages[newIndex];
+            showImagePreview(newImage.src, galleryGrid);
+        }
+    }
+    
+    // Event listeners for navigation
+    prevButton.onclick = () => navigateImage(-1);
+    nextButton.onclick = () => navigateImage(1);
+    
+    // Close modal handler
+    function closeModal() {
+        imageModal.classList.remove('active');
+        document.removeEventListener('keydown', handleKeyPress);
+    }
+    
+    // Close button and click outside
+    closeButton.onclick = closeModal;
+    imageModal.onclick = (e) => {
+        if (e.target === imageModal) {
+            closeModal();
+        }
+    };
+    
+    // Keyboard navigation
+    function handleKeyPress(e) {
+        if (e.key === 'ArrowLeft' && currentIndex > 0) {
+            navigateImage(-1);
+        } else if (e.key === 'ArrowRight' && currentIndex < allImages.length - 1) {
+            navigateImage(1);
+        } else if (e.key === 'Escape') {
+            closeModal();
+        }
+    }
+    
+    document.addEventListener('keydown', handleKeyPress);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Theme toggle
     const themeToggle = document.getElementById('theme-toggle');
@@ -272,39 +333,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.removeChild(link);
             }
         } else if (imageItem) {
-            showImagePreview(imageItem.src);
+            showImagePreview(imageItem.src, imageItem.closest('.gallery-grid'));
         }
     });
 
     function toggleEditMode(card) {
-        const isEditing = !card.classList.contains('editing');
-        
-        // Exit edit mode on other cards
-        document.querySelectorAll('.card.editing').forEach(editingCard => {
-            if (editingCard !== card) {
-                exitEditMode(editingCard);
-            }
-        });
-
-        card.classList.toggle('editing', isEditing);
-        const editButton = card.querySelector('.edit-card');
-        editButton.classList.toggle('active', isEditing);
-
+        const isEditing = card.classList.toggle('editing');
         const title = card.querySelector('.card-title');
         const description = card.querySelector('.card-description');
-
+        const editButton = card.querySelector('.edit-card');
+        
         if (isEditing) {
-            title.contentEditable = 'true';
-            description.contentEditable = 'true';
-            title.classList.add('editing');
-            description.classList.add('editing');
+            // Store original values
+            card.dataset.originalTitle = title.textContent;
+            card.dataset.originalDescription = description.textContent;
+            
+            // Make elements editable
+            title.contentEditable = true;
+            description.contentEditable = true;
             title.focus();
+            
+            // Change edit button icon
+            editButton.querySelector('.material-icons').textContent = 'save';
+            
+            // Show delete buttons
+            card.querySelectorAll('.delete-file.edit-only').forEach(button => {
+                button.style.display = 'inline-flex';
+            });
         } else {
-            title.contentEditable = 'false';
-            description.contentEditable = 'false';
-            title.classList.remove('editing');
-            description.classList.remove('editing');
+            // Save changes
             saveCardChanges(card);
+            
+            // Hide delete buttons
+            card.querySelectorAll('.delete-file.edit-only').forEach(button => {
+                button.style.display = 'none';
+            });
         }
     }
 
@@ -396,12 +459,23 @@ document.addEventListener('DOMContentLoaded', function() {
                         imageElement.className = 'gallery-item';
                         imageElement.dataset.fileId = file.id;
                         imageElement.innerHTML = `
-                            <img src="${file.url}" alt="${file.name}" onclick="showImagePreview('${file.url}')">
-                            <button class="delete-file" title="Delete file">
-                                <span class="material-icons">delete</span>
-                            </button>
+                            <img src="${file.url}" alt="${file.name}" class="preview-image" data-url="${file.url}">
+                            <div class="file-actions">
+                                <button class="download-file" title="Download file" onclick="window.open('${file.url}', '_blank')">
+                                    <span class="material-icons">download</span>
+                                </button>
+                                <button class="delete-file edit-only" title="Delete file">
+                                    <span class="material-icons">delete</span>
+                                </button>
+                            </div>
                         `;
                         galleryGrid.appendChild(imageElement);
+                        
+                        // Add click handler for image preview
+                        const img = imageElement.querySelector('.preview-image');
+                        img.addEventListener('click', function() {
+                            showImagePreview(this.dataset.url, this.closest('.gallery-grid'));
+                        });
                     } else {
                         const filesList = card.querySelector('.files-list');
                         const fileElement = document.createElement('div');
@@ -411,10 +485,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         fileElement.innerHTML = `
                             <span class="file-name">${file.name}</span>
                             <div class="file-actions">
-                                <button class="download-file" title="Download file">
+                                <button class="download-file" title="Download file" onclick="window.open('${file.url}', '_blank')">
                                     <span class="material-icons">download</span>
                                 </button>
-                                <button class="delete-file" title="Delete file">
+                                <button class="delete-file edit-only" title="Delete file">
                                     <span class="material-icons">delete</span>
                                 </button>
                             </div>
@@ -493,12 +567,23 @@ document.addEventListener('DOMContentLoaded', function() {
                         imageElement.className = 'gallery-item';
                         imageElement.dataset.fileId = file.id;
                         imageElement.innerHTML = `
-                            <img src="${file.url}" alt="${file.name}" onclick="showImagePreview('${file.url}')">
-                            <button class="delete-file" title="Delete file">
-                                <span class="material-icons">delete</span>
-                            </button>
+                            <img src="${file.url}" alt="${file.name}" class="preview-image" data-url="${file.url}">
+                            <div class="file-actions">
+                                <button class="download-file" title="Download file" onclick="window.open('${file.url}', '_blank')">
+                                    <span class="material-icons">download</span>
+                                </button>
+                                <button class="delete-file edit-only" title="Delete file">
+                                    <span class="material-icons">delete</span>
+                                </button>
+                            </div>
                         `;
                         galleryGrid.appendChild(imageElement);
+                        
+                        // Add click handler for image preview
+                        const img = imageElement.querySelector('.preview-image');
+                        img.addEventListener('click', function() {
+                            showImagePreview(this.dataset.url, this.closest('.gallery-grid'));
+                        });
                     } else {
                         const filesList = card.querySelector('.files-list');
                         const fileElement = document.createElement('div');
@@ -508,10 +593,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         fileElement.innerHTML = `
                             <span class="file-name">${file.name}</span>
                             <div class="file-actions">
-                                <button class="download-file" title="Download file">
+                                <button class="download-file" title="Download file" onclick="window.open('${file.url}', '_blank')">
                                     <span class="material-icons">download</span>
                                 </button>
-                                <button class="delete-file" title="Delete file">
+                                <button class="delete-file edit-only" title="Delete file">
                                     <span class="material-icons">delete</span>
                                 </button>
                             </div>
@@ -523,26 +608,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error uploading files:', error);
                 alert('Failed to upload files. Please try again.');
             }
-        }
-    });
-
-    // Image preview modal
-    const imageModal = document.querySelector('.image-modal');
-    const modalImage = imageModal.querySelector('img');
-    const closeButton = imageModal.querySelector('.close-button');
-
-    function showImagePreview(imageUrl) {
-        modalImage.src = imageUrl;
-        imageModal.classList.add('active');
-    }
-
-    closeButton.addEventListener('click', () => {
-        imageModal.classList.remove('active');
-    });
-
-    imageModal.addEventListener('click', (e) => {
-        if (e.target === imageModal) {
-            imageModal.classList.remove('active');
         }
     });
 
@@ -615,4 +680,32 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
+
+    document.addEventListener('click', async (e) => {
+        const deleteButton = e.target.closest('.delete-file');
+        if (deleteButton) {
+            e.preventDefault();
+            const fileItem = deleteButton.closest('.gallery-item, .file-item');
+            const card = deleteButton.closest('.card');
+            const cardId = card.dataset.cardId;
+            const fileId = fileItem.dataset.fileId;
+
+            if (await showConfirmDialog('Delete File', 'Are you sure you want to delete this file?')) {
+                try {
+                    const response = await fetch(`/api/cards/${cardId}/files/${fileId}`, {
+                        method: 'DELETE'
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to delete file');
+                    }
+
+                    fileItem.remove();
+                } catch (error) {
+                    console.error('Error deleting file:', error);
+                    alert('Failed to delete file. Please try again.');
+                }
+            }
+        }
+    });
 });

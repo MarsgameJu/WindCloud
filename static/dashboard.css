@@ -1075,7 +1075,7 @@ body.dark-mode textarea {
     left: 0;
     right: 0;
     padding: 8px;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(255, 255, 255, 0.9);
     display: flex;
     justify-content: center;
     gap: 8px;
@@ -1265,9 +1265,137 @@ body.dark-mode .files-section h4 {
 #share-modal .submit-button {
     background: var(--primary-color);
     color: white;
-    border: none;
 }
 
 #share-modal .submit-button:hover {
     background: var(--secondary-color);
+}
+
+/* File actions styling */
+.file-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.download-file,
+.delete-file {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.download-file:hover,
+.delete-file:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.delete-file.edit-only {
+    display: none;
+}
+
+.card.editing .delete-file.edit-only {
+    display: inline-flex;
+}
+
+/* Ensure gallery items show both buttons properly */
+.gallery-item {
+    position: relative;
+}
+
+.gallery-item .file-actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    padding: 4px;
+}
+
+/* Image Preview Modal */
+#image-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+#image-modal.active {
+    display: flex;
+}
+
+#image-modal .modal-image {
+    max-width: 90%;
+    max-height: 90vh;
+    object-fit: contain;
+}
+
+#image-modal .nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#image-modal .nav-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#image-modal .prev-image {
+    left: 20px;
+}
+
+#image-modal .next-image {
+    right: 20px;
+}
+
+#image-modal .nav-button .material-icons {
+    color: white;
+    font-size: 36px;
+}
+
+#image-modal .close-modal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#image-modal .close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#image-modal .close-modal .material-icons {
+    color: white;
+    font-size: 24px;
 }
