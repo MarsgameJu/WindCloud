@@ -32,11 +32,8 @@
 4. **Cookies & Sessions**:
    - [ ] Wie werden Cookies und Sessions im System behandelt? **Überprüfung und Verbesserung der Sicherheit**.
 
-5. **Registrierung**:
-   - [ ] Überprüfe bei der Registrierung, ob der Benutzername oder die E-Mail bereits verwendet wird. **Flash-Benachrichtigung bei Nutzung eines bestehenden Namens oder E-Mail**.
-
-6. **Passwort anzeigen**:
+5. **Passwort anzeigen**:
    - [ ] Implementiere eine Funktion, um das Passwort anzuzeigen oder zu verbergen.
 
-7. **Alles auf Englisch**:
+6. **Alles auf Englisch**:
 

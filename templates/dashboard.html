@@ -49,7 +49,8 @@
     <main class="dashboard-content">
         <div class="cards-container list">
             {% for card in cards %}
-            <div class="card" data-card-id="{{ card.id }}">
+            <!-- Added data-can-edit attribute based on card.can_edit -->
+            <div class="card" data-card-id="{{ card.id }}" data-can-edit="{{ card.can_edit }}">
                 <div class="card-header">
                     <h2 class="card-title">{{ card.title }}</h2>
                     <div class="card-actions">

@@ -352,6 +352,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function toggleEditMode(card) {
+        // Check permission before enabling edit mode
+        if (card.dataset.canEdit !== "1") {
+            alert("You have read-only access. You cannot edit this card.");
+            return;
+        }
         const isEditing = card.classList.toggle('editing');
         const title = card.querySelector('.card-title');
         const description = card.querySelector('.card-description');
@@ -688,8 +693,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
             })
             .then(response => {
-                if (!response.ok) throw new Error('Failed to share card');
-                return response.json();
+                return response.json().then(data => {
+                    if (!response.ok) throw new Error(data.error || 'Failed to share card');
+                    return data;
+                });
             })
             .then(data => {
                 modal.classList.remove('active');
@@ -698,7 +705,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.error('Error sharing card:', error);
-                alert('Failed to share card. Please try again.');
+                alert(error.message || 'Failed to share card. Please try again. this is the error'); 
             });
         });
     }

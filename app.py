@@ -257,14 +257,14 @@ def dashboard():
         SELECT DISTINCT c.id, c.title, c.description, c.created_at, c.updated_at,
                u.username as owner_name,
                CASE WHEN c.user_id = ? THEN 1 ELSE 0 END as is_owner,
-               CASE WHEN cs.permission = 'edit' THEN 1 ELSE 0 END as can_edit
+               CASE WHEN c.user_id = ? THEN 1 ELSE (CASE WHEN cs.permission = 'write' THEN 1 ELSE 0 END) END as can_edit
         FROM cards c
         LEFT JOIN card_shares cs ON c.id = cs.card_id
         LEFT JOIN users u ON c.user_id = u.id
         WHERE c.user_id = ? OR cs.user_id = ?
         GROUP BY c.id
         ORDER BY c.updated_at DESC
-    """, (session["user_id"], session["user_id"], session["user_id"]))
+    """, (session["user_id"], session["user_id"], session["user_id"], session["user_id"]))
     cards = cursor.fetchall()
     
     # Für jede Karte Dateien abrufen und trennen in Bilder und andere Dateien
@@ -352,15 +352,17 @@ def manage_card(card_id):
         if not card:
             return {"error": "Card not found"}, 404
         
-        # Check if user has permission
+        # Updated permission check for both PUT and DELETE:
         if card[0] != session["user_id"]:
             cursor.execute(
                 "SELECT permission FROM card_shares WHERE card_id = ? AND user_id = ?", 
                 (card_id, session["user_id"])
             )
             share = cursor.fetchone()
-            if not share or (request.method == "DELETE" and share[0] != "write"):
-                return {"error": "Permission denied"}, 403
+            if not share or share[0] != "write":
+                flash("No Permisson", "danger")    
+                return {"error": "Permission denied: You have read-only access."}, 403
+
 
         if request.method == "DELETE":
             try:
@@ -502,7 +504,7 @@ def delete_file(card_id, file_id):
         # Check if user has permission
         if card[0] != session["user_id"]:
             cursor.execute(
-                "SELECT permission FROM card_shares WHERE card_id = ? AND user_id = ?",
+                "SELECT permission FROM card_shares WHERE card_id = ? AND user_id = ?", 
                 (card_id, session["user_id"])
             )
             share = cursor.fetchone()
