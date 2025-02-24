@@ -47,7 +47,7 @@ WindCloud is a modern Flask-based web application that provides secure file stor
 
 1. **Clone Repository**
 ```bash
-git clone https://github.com/your-user/windcloud.git
+git clone https://github.com/MarsgameJu/WindCloud.git
 cd windcloud
 ```
 
