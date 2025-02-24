@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error creating card:', error);
-            alert('Failed to create card. Please try again.');
+            flashMessage('Failed to create card. Please try again.', 'danger');
         });
     });
 
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 } catch (error) {
                     console.error('Error deleting card:', error);
-                    alert(`Failed to delete card: ${error.message}`);
+                    flashMessage(`Failed to delete card: ${error.message}`, 'danger');
                 }
             }
         } else if (removeFileBtn) {
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     fileItem.remove();
                 } catch (error) {
                     console.error('Error deleting file:', error);
-                    alert('Failed to delete file. Please try again.');
+                    flashMessage('Failed to delete file. Please try again.', 'danger');
                 }
             }
         } else if (downloadBtn) {
@@ -354,7 +354,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function toggleEditMode(card) {
         // Check permission before enabling edit mode
         if (card.dataset.canEdit !== "1") {
-            alert("You have read-only access. You cannot edit this card.");
+            flashMessage("You have read-only access. You cannot edit this card.", "warning");
             return;
         }
         const isEditing = card.classList.toggle('editing');
@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error updating card:', error);
-            alert('Failed to save changes. Please try again.');
+            flashMessage('Failed to save changes. Please try again.', 'danger');
         });
     }
 
@@ -528,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 fileInput.value = '';
             } catch (error) {
                 console.error('Error uploading files:', error);
-                alert('Failed to upload files. Please try again.');
+                flashMessage('Failed to upload files. Please try again.', 'danger');
             }
         }
     });
@@ -633,7 +633,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             } catch (error) {
                 console.error('Error uploading files:', error);
-                alert('Failed to upload files. Please try again.');
+                flashMessage('Failed to upload files. Please try again.', 'danger');
             }
         }
     });
@@ -701,11 +701,11 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 modal.classList.remove('active');
                 this.reset();
-                alert('Card shared successfully!');
+                flashMessage('Card shared successfully!', 'success');
             })
             .catch(error => {
                 console.error('Error sharing card:', error);
-                alert(error.message || 'Failed to share card. Please try again. this is the error'); 
+                flashMessage(error.message || 'Failed to share card. Please try again. this is the error', 'danger');
             });
         });
     }
@@ -732,7 +732,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     fileItem.remove();
                 } catch (error) {
                     console.error('Error deleting file:', error);
-                    alert('Failed to delete file. Please try again.');
+                    flashMessage('Failed to delete file. Please try again.', 'danger');
                 }
             }
         }
