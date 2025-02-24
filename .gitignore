@@ -1,0 +1,16 @@
+# Ignore __pycache__ Folder
+__pycache__/
+utils/__pycache__/
+
+# Ignore flask_session Folder
+flask_session/
+
+# Ignore file users.db in /database
+database/users.db
+
+# Ignore toDo.md File
+toDo.md
+
+# Ignore the venv Folder
+venv/
+

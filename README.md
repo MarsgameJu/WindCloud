@@ -85,12 +85,7 @@ RATE_LIMIT = "100 per day"
 UPLOAD_FOLDER = "uploads"
 ```
 
-5. **Initialize Database**
-```bash
-flask init-db
-```
-
-6. **Start Application**
+5. **Start Application**
 ```bash
 python app.py
 ```

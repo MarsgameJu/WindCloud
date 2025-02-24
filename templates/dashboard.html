@@ -50,78 +50,71 @@
         <div class="cards-container list">
             {% for card in cards %}
             <div class="card" data-card-id="{{ card.id }}">
-                <div class="card-content">
-                    <h3 class="card-title" contenteditable="false">{{ card.title }}</h3>
-                    <p class="card-description" contenteditable="false">{{ card.description }}</p>
-                    
-                    <div class="gallery-section">
-                        <h4>Gallery</h4>
-                        <div class="image-gallery">
-                            {% for file in card.images %}
-                            <div class="image-item" data-file-id="{{ file.id }}">
-                                <img src="{{ file.url }}" alt="Card Image">
-                                <div class="file-actions">
-                                    <button class="btn download-btn">
-                                        <span class="material-icons">download</span>
-                                        Download
-                                    </button>
-                                    <button class="btn btn-danger remove-file">
-                                        <span class="material-icons">delete</span>
-                                        Remove
-                                    </button>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        <div class="upload-area" data-type="image">
-                            <span class="material-icons">add_photo_alternate</span>
-                            <p>Click or drag images here</p>
-                            <input type="file" multiple accept="image/*" class="file-input" style="display: none;">
-                        </div>
-                    </div>
-                    
-                    <div class="files-section">
-                        <h4>Files</h4>
-                        <div class="file-list">
-                            {% for file in card.files %}
-                            {% if not file.is_image %}
-                            <div class="file-item" data-file-id="{{ file.id }}">
-                                <span class="material-icons file-icon">description</span>
-                                <span class="file-name">{{ file.name }}</span>
-                                <div class="file-actions">
-                                    <button class="btn download-btn">
-                                        <span class="material-icons">download</span>
-                                        Download
-                                    </button>
-                                    <button class="btn btn-danger remove-file">
-                                        <span class="material-icons">delete</span>
-                                        Remove
-                                    </button>
-                                </div>
-                            </div>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
-                        <div class="upload-area" data-type="file">
-                            <span class="material-icons">upload_file</span>
-                            <p>Click or drag files here</p>
-                            <input type="file" multiple accept=".pdf,.doc,.docx,.txt" class="file-input" style="display: none;">
-                        </div>
-                    </div>
-
+                <div class="card-header">
+                    <h2 class="card-title">{{ card.title }}</h2>
                     <div class="card-actions">
-                        <button class="btn btn-primary edit-card">
+                        <button class="card-action-button edit-card" title="Edit">
                             <span class="material-icons">edit</span>
-                            Edit
                         </button>
-                        <button class="btn btn-secondary share-card">
+                        <button class="card-action-button share-card" title="Share">
                             <span class="material-icons">share</span>
-                            Share
                         </button>
-                        <button class="btn btn-danger delete-card">
+                        <button class="card-action-button delete-card" title="Delete">
                             <span class="material-icons">delete</span>
-                            Delete
                         </button>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p class="card-description">{{ card.description }}</p>
+                </div>
+                <div class="card-gallery">
+                    <div class="gallery-header">
+                        <h3 class="gallery-title">Gallery</h3>
+                    </div>
+                    <div class="gallery-grid">
+                        {% for file in card.images %}
+                        <div class="gallery-item" data-file-id="{{ file.id }}">
+                            <img src="{{ file.url }}" alt="Card Image" class="preview-image" data-url="{{ file.url }}">
+                            <div class="file-actions">
+                                <button class="download-file" title="Download">
+                                    <span class="material-icons">download</span>
+                                </button>
+                                <button class="delete-file edit-only" title="Delete">
+                                    <span class="material-icons">delete</span>
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="upload-area" data-type="image">
+                        <span class="material-icons">cloud_upload</span>
+                        <p>Click or drag images here to upload</p>
+                        <input type="file" class="file-input" multiple accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                <div class="card-files">
+                    <div class="files-header">
+                        <h3 class="files-title">Files</h3>
+                    </div>
+                    <div class="files-list">
+                        {% for file in card.files %}
+                        <div class="file-item" data-file-id="{{ file.id }}" data-url="{{ file.url }}">
+                            <span class="file-name">{{ file.name }}</span>
+                            <div class="file-actions">
+                                <button class="download-file" title="Download">
+                                    <span class="material-icons">download</span>
+                                </button>
+                                <button class="delete-file edit-only" title="Delete">
+                                    <span class="material-icons">delete</span>
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="upload-area" data-type="file">
+                        <span class="material-icons">cloud_upload</span>
+                        <p>Click or drag files here to upload</p>
+                        <input type="file" class="file-input" multiple style="display: none;">
                     </div>
                 </div>
             </div>

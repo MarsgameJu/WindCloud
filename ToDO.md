@@ -1,12 +1,10 @@
 
-
 ---
 
 ### **To-Do / Checkliste**
 
-1. **Login-Problem**:
-   - [ ] Beim erneuten Einloggen sind Karten verändert (andere Buttons, Layout) – **Datenbankproblem beim Aus- und Einloggen**?
-     - Untersuchen, warum Karten beim erneuten Login fehlerhaft angezeigt werden.
+1. **Shared-Cards**:
+   - Bei Read permisson sind auch Write permisson dabei
    
 2. **Fehlermeldungen als Flashnachrichten anzeigen**:
    - [ ] Fehlermeldungen sollten als Flash-Nachrichten (Pop-ups) angezeigt werden.
@@ -15,6 +13,9 @@
 4. **Zugriff auf Dateien über `/Uploads/Dateiname`**:
    - [ ] Momentan kann man direkt über den Pfad `/Uploads/Dateiname` auf die Datei zugreifen, was nicht gewünscht ist.
      - Restriktiere den direkten Zugriff auf Dateien außerhalb des vorgesehenen Rahmens.
+   
+5. **Zu Lange Beschreibung/titel**
+   - [ ] max limit für Titel und Scrolable Beschreibung
 ---
 
 ### **Weitere Aufgaben:**

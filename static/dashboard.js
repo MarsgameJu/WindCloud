@@ -1,4 +1,4 @@
-    // Image preview function
+// Image preview function
 function showImagePreview(imageUrl, galleryGrid) {
     const imageModal = document.getElementById('image-modal');
     const modalImage = imageModal.querySelector('.modal-image');
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const editBtn = e.target.closest('.edit-card');
         const shareBtn = e.target.closest('.share-card');
         const removeFileBtn = e.target.closest('.remove-file');
-        const downloadBtn = e.target.closest('.download-btn');
+        const downloadBtn = e.target.closest('.download-file, .download-btn');
         const imageItem = e.target.closest('.image-item img');
 
         if (editBtn) {
@@ -327,19 +327,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         } else if (downloadBtn) {
-            const fileItem = downloadBtn.closest('.file-item, .image-item');
+            const fileItem = downloadBtn.closest('.file-item, .gallery-item');
+            if (!fileItem) return;
             let url;
-            
-            if (fileItem.classList.contains('image-item')) {
-                url = fileItem.querySelector('img').src;
+            if (fileItem.classList.contains('gallery-item')) {
+                url = fileItem.querySelector('img').dataset.url || fileItem.querySelector('img').src;
             } else {
                 url = fileItem.dataset.url;
             }
-
             if (url) {
+                // Extract filename from URL
+                const filename = url.split('/').pop();
+                // Create an anchor element, set download attribute and trigger click
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = '';
+                link.setAttribute('download', filename);
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -481,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         imageElement.innerHTML = `
                             <img src="${file.url}" alt="${file.name}" class="preview-image" data-url="${file.url}">
                             <div class="file-actions">
-                                <button class="download-file" title="Download file" onclick="window.open('${file.url}', '_blank')">
+                                <button class="download-file" title="Download file">
                                     <span class="material-icons">download</span>
                                 </button>
                                 <button class="delete-file edit-only" title="Delete file">
@@ -505,7 +507,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         fileElement.innerHTML = `
                             <span class="file-name">${file.name}</span>
                             <div class="file-actions">
-                                <button class="download-file" title="Download file" onclick="window.open('${file.url}', '_blank')">
+                                <button class="download-file" title="Download file">
                                     <span class="material-icons">download</span>
                                 </button>
                                 <button class="delete-file edit-only" title="Delete file">
@@ -589,7 +591,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         imageElement.innerHTML = `
                             <img src="${file.url}" alt="${file.name}" class="preview-image" data-url="${file.url}">
                             <div class="file-actions">
-                                <button class="download-file" title="Download file" onclick="window.open('${file.url}', '_blank')">
+                                <button class="download-file" title="Download file">
                                     <span class="material-icons">download</span>
                                 </button>
                                 <button class="delete-file edit-only" title="Delete file">
@@ -613,7 +615,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         fileElement.innerHTML = `
                             <span class="file-name">${file.name}</span>
                             <div class="file-actions">
-                                <button class="download-file" title="Download file" onclick="window.open('${file.url}', '_blank')">
+                                <button class="download-file" title="Download file">
                                     <span class="material-icons">download</span>
                                 </button>
                                 <button class="delete-file edit-only" title="Delete file">
@@ -727,5 +729,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }
+    });
+//den stuff evtl entfernen wenn er nicht geht.
+    document.addEventListener('click', async (e) => {
+        // ...existing code for buttons...
+        const imagePreview = e.target.closest('.preview-image');
+        if (imagePreview) {
+            // Use the data-url attribute and nearest gallery grid container for preview
+            showImagePreview(imagePreview.dataset.url, imagePreview.closest('.gallery-grid'));
+        }
+        // ...existing code...
     });
 });

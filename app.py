@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, url_for, flash, send_file
+from flask import Flask, render_template, request, redirect, session, url_for, flash, send_file, send_from_directory
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_session import Session
@@ -252,7 +252,7 @@ def dashboard():
         session.clear()
         return redirect(url_for("login"))
     
-    # Get user's cards and shared cards
+    # Get user's cards & shared cards
     cursor.execute("""
         SELECT DISTINCT c.id, c.title, c.description, c.created_at, c.updated_at,
                u.username as owner_name,
@@ -267,9 +267,40 @@ def dashboard():
     """, (session["user_id"], session["user_id"], session["user_id"]))
     cards = cursor.fetchall()
     
+    # Für jede Karte Dateien abrufen und trennen in Bilder und andere Dateien
+    cards_data = []
+    for card in cards:
+        card_id = card[0]
+        cursor.execute("SELECT id, name, path, is_image FROM files WHERE card_id = ?", (card_id,))
+        files = cursor.fetchall()
+        images = []
+        non_images = []
+        for f in files:
+            file_obj = {
+                "id": f[0],
+                "name": f[1],
+                "url": "/uploads/" + os.path.basename(f[2]),
+                "is_image": bool(f[3])
+            }
+            if file_obj["is_image"]:
+                images.append(file_obj)
+            else:
+                non_images.append(file_obj)
+        cards_data.append({
+            "id": card[0],
+            "title": card[1],
+            "description": card[2],
+            "created_at": card[3],
+            "updated_at": card[4],
+            "owner_name": card[5],
+            "is_owner": card[6],
+            "can_edit": card[7],
+            "images": images,
+            "files": non_images
+        })
     conn.close()
     
-    return render_template("dashboard.html", current_user={"id": session["user_id"], "email": user[0], "username": user[1]}, cards=cards)
+    return render_template("dashboard.html", current_user={"id": session["user_id"], "email": user[0], "username": user[1]}, cards=cards_data)
 
 @app.route("/api/cards", methods=["POST"])
 def create_card():
@@ -465,29 +496,26 @@ def delete_file(card_id, file_id):
         # Get card info
         cursor.execute("SELECT user_id FROM cards WHERE id = ?", (card_id,))
         card = cursor.fetchone()
-
         if not card:
             return {"error": "Card not found"}, 404
 
         # Check if user has permission
         if card[0] != session["user_id"]:
             cursor.execute(
-                "SELECT permission FROM card_shares WHERE card_id = ? AND user_id = ?", 
+                "SELECT permission FROM card_shares WHERE card_id = ? AND user_id = ?",
                 (card_id, session["user_id"])
             )
             share = cursor.fetchone()
             if not share or share[0] != "write":
                 return {"error": "Permission denied"}, 403
 
-        # Get file info
-        cursor.execute("SELECT name FROM files WHERE id = ? AND card_id = ?", (file_id, card_id))
-        file = cursor.fetchone()
-
-        if not file:
+        # Retrieve the full file path from the DB
+        cursor.execute("SELECT path FROM files WHERE id = ? AND card_id = ?", (file_id, card_id))
+        row = cursor.fetchone()
+        if not row:
             return {"error": "File not found"}, 404
 
-        # Delete the physical file
-        file_path = os.path.join(app.config["UPLOAD_FOLDER"], file[0])
+        file_path = row[0]
         if os.path.exists(file_path):
             os.remove(file_path)
 
@@ -552,12 +580,9 @@ def share_card(card_id):
 
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
-    """Serve uploaded files"""
+    """Serve uploaded files using send_from_directory"""
     try:
-        return send_file(
-            os.path.join(app.config['UPLOAD_FOLDER'], filename),
-            as_attachment=False
-        )
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=False)
     except Exception as e:
         print(f"Error serving file {filename}: {str(e)}")
         return {"error": "File not found"}, 404
