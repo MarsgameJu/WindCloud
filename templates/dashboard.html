@@ -145,7 +145,7 @@
 
     <!-- Card Template -->
     <template id="card-template">
-        <div class="card" data-card-id="">
+        <div class="card" data-card-id="" data-can-edit="1">
             <div class="card-content">
                 <h3 class="card-title" contenteditable="false"></h3>
                 <p class="card-description" contenteditable="false"></p>
@@ -297,6 +297,8 @@
         </button>
     </div>
 
+    <!-- Include flash-message.js before dashboard.js -->
+    <script src="{{ url_for('static', filename='flash-message.js') }}"></script>
     <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 </body>
 </html>

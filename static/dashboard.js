@@ -141,6 +141,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const cardElement = document.createElement('div');
             cardElement.className = 'card';
             cardElement.dataset.cardId = card.id;
+            // Set editable permission for owner
+            cardElement.dataset.canEdit = "1";
             cardElement.innerHTML = `
                 <div class="card-header">
                     <h2 class="card-title">${card.title}</h2>
@@ -352,9 +354,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function toggleEditMode(card) {
-        // Check permission before enabling edit mode
-        if (card.dataset.canEdit !== "1") {
-            flashMessage("You have read-only access. You cannot edit this card.", "warning");
+        console.log("toggleEditMode called, canEdit:", card.dataset.canEdit);
+        // Convert data attribute to number for reliable comparison
+        if (parseInt(card.dataset.canEdit, 10) !== 1) {
+            flashMessage("Du hast nur Lesezugriff. Du kannst diese Karte nicht bearbeiten.", "warning");
             return;
         }
         const isEditing = card.classList.toggle('editing');
