@@ -2,13 +2,10 @@
 ---
 ### **To-Do / Checkliste**
 
-1. **Zu Lange Beschreibung/titel**
-   - [ ] max limit für Titel und Scrolable Beschreibung
-
-2. **Zugriff auf Dateien über `/Uploads/Dateiname`**:
+1. **Zugriff auf Dateien über `/Uploads/Dateiname`**:
    - [ ] Momentan kann man direkt über den Pfad `/Uploads/Dateiname` auf die Datei zugreifen, was nicht gewünscht ist.
      - Restriktiere den direkten Zugriff auf Dateien außerhalb des vorgesehenen Rahmens.
-   
+
 
 ---
 
