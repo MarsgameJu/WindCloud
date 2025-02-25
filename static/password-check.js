@@ -11,20 +11,20 @@ document.getElementById('password-form').addEventListener('submit', function(eve
 
     // Überprüfung der Passwortbedingungen
     if (password !== confirmPassword) {
-        flashMessage('Die Passwörter stimmen nicht überein!', 'danger');
-        console.log('Die Passwörter stimmen nicht überein!');
+        flashMessage('Passwords do not match!', 'danger');
+        console.log('Passwords do not match!');
         return; // Verhindert das Absenden des Formulars
     }
 
     if (!lengthCriteria || !numberOrSpecialCharCriteria || !caseCriteria) {
-        flashMessage('Das Passwort erfüllt nicht alle Anforderungen!', 'danger');
-        console.log('Das Passwort erfüllt nicht alle Anforderungen!');
+        flashMessage('Password does not meet all requirements!', 'danger');
+        console.log('Password does not meet all requirements!');
         return; // Verhindert das Absenden des Formulars
     }
 
     // Wenn alle Bedingungen erfüllt sind, das Formular absenden (kann nach erfolgreicher Validierung gemacht werden)
-    flashMessage('Passwörter sind gültig!', 'success');
-    console.log('Passwörter sind gültig!');
+    flashMessage('Passwords are valid!', 'success');
+    console.log('Passwords are valid!');
     this.submit(); // Formular wird tatsächlich abgeschickt
 });
 
@@ -81,9 +81,9 @@ document.getElementById('confirm-password').addEventListener('input', function (
     if (password === confirmPassword) {
         this.setCustomValidity(""); // Keine Fehlermeldung
     } else {
-        this.setCustomValidity("Die Passwörter stimmen nicht überein!"); // Fehlermeldung
-        flashMessage('Passwörter stimmen nicht überein', 'warning');
-        console.log('Passwörter stimmen nicht überein');
+        this.setCustomValidity("Passwords do not match!"); // Fehlermeldung
+        flashMessage('Passwords do not match!', 'warning');
+        console.log('Passwords do not match!');
     }
 
     if (password === confirmPassword && password.length >= 8) {

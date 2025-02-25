@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,12 +26,12 @@
         <!-- Login Formular -->
         <form method="POST" action="{{ url_for('login') }}">
             <input type="email" name="email" placeholder="E-Mail" required>
-            <input type="password" name="password" placeholder="Passwort" required>
-            <input type="submit" value="Einloggen">
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="submit" value="Log-in">
         </form>
 
-        <p>Noch kein Konto? <a href="{{ url_for('register') }}">Registrieren</a></p>
-        <p><a href="#">Passwort vergessen?</a></p>
+        <p>No account yet? <a href="{{ url_for('register') }}">Register</a></p>
+        <p><a href="#pwforgotten">Forgot your password?</a></p>
     </div>
 
 </body>

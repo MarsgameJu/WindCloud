@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +9,14 @@
 <body>
     <div class="container">
         <div class="card">
-            <h1>2-Faktor-Authentifizierung</h1>
+            <h1>2-factor authentication</h1>
 
             {% if request.endpoint == 'show_2fa' %}
             <!-- Beim Registrieren -->
-            <p>Scanne den QR-Code mit deiner Authenticator-App und gib den Code ein, um die 2FA zu aktivieren.</p>
+            <p>Scan the QR code with your Authenticator app and enter the code to activate 2FA.</p>
             {% else %}
             <!-- Beim Login -->
-            <p>Gib den 6-stelligen Code ein, den du in deiner Authenticator-App findest, um dich anzumelden.</p>
+            <p>Enter the 6-digit code that you can find in your Authenticator app to log in.</p>
             {% endif %}
             
             {% if img_base64 %}
@@ -26,9 +26,9 @@
             {% endif %}
             
             <form method="POST" class="auth-form">
-                <label for="code">Gib den Code ein:</label>
-                <input type="text" name="code" id="code" required maxlength="6" placeholder="6-stelliger Code">
-                <button type="submit">Bestätigen</button>
+                <label for="code">Enter the code:</label>
+                <input type="text" name="code" id="code" required maxlength="6" placeholder="XXXXXX">
+                <button type="submit">Confirm</button>
             </form>
         </div>
     </div>

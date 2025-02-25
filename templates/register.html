@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,14 +19,14 @@
         {% endwith %}
     </div>      
     <div class="container">
-        <h1>Registriere dich</h1>
+        <h1>Register</h1>
         <form method="POST" action="{{ url_for('register') }}" id="password-form">
-            <input type="text" name="username" placeholder="Benutzername" required>
+            <input type="text" name="username" placeholder="Username" required>
             <input type="email" name="email" placeholder="E-Mail" required>    
 
-            <input type="password" id="password" name="password" placeholder="Passwort" required>
+            <input type="password" id="password" name="password" placeholder="Password" required>
 
-            <input type="password" id="confirm-password" name="confirm-password" placeholder="Passwort bestätigen" required>
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm password" required>
 
             <div id="password-strength-bar" class="password-strength-bar">
                 <div id="password-progress" class="password-progress"></div>
@@ -36,15 +36,15 @@
                 <ul>
                     <li id="length" class="requirement">
                         <input type="checkbox" id="check-length" disabled>
-                        <label for="check-length">Mindestens 8 Zeichen</label>
+                        <label for="check-length">At least 8 characters</label>
                     </li>
                     <li id="number" class="requirement">
                         <input type="checkbox" id="check-number" disabled>
-                        <label for="check-number">Mindestens eine Zahl oder Sonderzeichen</label>
+                        <label for="check-number">contains a number or special character</label>
                     </li>
                     <li id="case" class="requirement">
                         <input type="checkbox" id="check-case" disabled>
-                        <label for="check-case">Groß- und Kleinbuchstaben</label>
+                        <label for="check-case">Contains upper and lower case letters</label>
                     </li>
                 </ul>
             </div>
@@ -52,7 +52,7 @@
             <input type="submit" id="submit-btn" value="Registrieren" disabled>
         </form>
 
-        <p>Bereits registriert? <a href="{{ url_for('login') }}">Einloggen</a></p>
+        <p>Already registered?<a href="{{ url_for('login') }}">Log-in</a></p>
     </div>
 
     <script src="{{ url_for('static', filename='flash-message.js') }}"></script>
