@@ -88,14 +88,18 @@ WindCloud is a modern Flask-based web application built for secure file storage,
 
 ```
 WindCloud/
+├── .github/                # Holds issue templates
 ├── database/               # SQLite database and schema files
-├── static/                 # Static assets: stylesheets, scripts, images
+├── static/                 # Static assets: stylesheets, scripts
+│   ├── assets/             # Images for Landing Page
 │   ├── style.css           # Global styles
 │   ├── dashboard.css       # Dashboard-specific styling
 │   ├── script.js           # General JS functions
 │   ├── dashboard.js        # Dashboard interactivity (cards, modals, uploads)
 │   ├── flash-message.js    # Flash messages handler
-│   └── password-check.js   # Password validation and strength checking
+│   ├── password-check.js   # Password validation and strength checking
+│   ├── index.css           # Sytle for index.html
+│   └── index.html          # Landing page
 ├── templates/              # Jinja2 HTML templates
 │   ├── login.html          # User login
 │   ├── register.html       # User registration
@@ -103,8 +107,8 @@ WindCloud/
 │   └── dashboard.html      # Main dashboard with card system
 ├── uploads/                # User-uploaded files
 ├── utils/                  # Helper functions for database & security operations
-│   ├── database.py         
-│   └── security.py         
+│   ├── database.py         # Strucure and Init Database
+│   └── security.py         # ensures securoty for Webaplication
 ├── app.py                  # Main Flask application
 ├── config.py               # App configuration settings
 ├── requirements.txt        # Python dependencies
