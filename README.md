@@ -64,7 +64,7 @@ WindCloud is a modern Flask-based web application built for secure file storage,
    FLASK_ENV=development
    SECRET_KEY=your-secure-secret-key
    SESSION_TYPE=filesystem
-   RATE_LIMIT=100/day
+   RATE_LIMIT=5/minute
    UPLOAD_FOLDER=uploads
    MAX_CONTENT_LENGTH=16777216  # 16MB max file size
    ```
@@ -177,9 +177,15 @@ Please follow PEP 8 guidelines and write clear commit messages.
 
 ---
 
-## 📜 License
+## 📜 Other important things
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+- [Code of Conduct](info_doc/CODE_OF_CONDUCT.md)
+- [Contributing Guidelines](info_doc/CONTRIBUTING.md)
+- [License](info_doc/LICENSE)
+- [Security Policy](info_doc/SECURITY.md)
+- [Changelog](info_doc/CHANGELOG.md)
+
 
 ---
 

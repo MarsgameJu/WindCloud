@@ -321,3 +321,30 @@ input[type="submit"]:hover {
     background-color: #3578e5;
 }
 
+.password-wrapper {
+    position: relative;
+    margin: 10px 0;
+}
+
+.password-wrapper input[type="password"] {
+    width: 100%;
+    padding-right: 40px; /* Platz für das Icon */
+}
+
+.password-wrapper .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #e0e0e0;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0;
+}
+
+.password-wrapper .toggle-password:hover {
+    color: #3f9af4;
+}
+

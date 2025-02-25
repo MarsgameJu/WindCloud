@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='flash-message.js') }}"></script>
     <script src="{{ url_for('static', filename='password-check.js') }}"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <div class="flashes">
@@ -26,7 +27,12 @@
         <!-- Login Formular -->
         <form method="POST" action="{{ url_for('login') }}">
             <input type="email" name="email" placeholder="E-Mail" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <div class="password-wrapper">
+                <input type="password" id="login-password" name="password" placeholder="Password" required>
+                <button type="button" class="toggle-password" data-target="login-password" aria-label="Toggle Password">
+                    <span class="material-icons">visibility</span>
+                </button>
+            </div>
             <input type="submit" value="Log-in">
         </form>
 
