@@ -17,7 +17,7 @@ import base64
 import io
 from werkzeug.utils import secure_filename
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='static')
 app.config.from_object(config)
 
 # File upload configuration
@@ -127,7 +127,7 @@ if not os.path.exists('database.db'):
 
 @app.route("/")
 def index():
-    return redirect(url_for('login'))
+    return send_from_directory('static', 'index.html')
 
 @app.route("/login", methods=["GET", "POST"])
 @limiter.limit("5 per minute")

@@ -1,0 +1,274 @@
+:root {
+    /* Light mode variables */
+    --light-bg: #ffffff;
+    --light-text: #333333;
+    --light-primary: #2196f3;
+    --light-secondary: #dfdfdf;
+    --light-accent: #1976d2;
+    
+    /* Dark mode variables */
+    --dark-bg: #121212;
+    --dark-text: #ffffff;
+    --dark-primary: #90caf9;
+    --dark-secondary: #1e1e1e;
+    --dark-accent: #64b5f6;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+body.light-mode {
+    background-color: var(--light-bg);
+    color: var(--light-text);
+}
+
+/* Header styles */
+header {
+    padding: 1rem 2rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nav-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: inherit;
+    font-size: 1.2rem;
+}
+
+.login-btn {
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.dark-mode .login-btn {
+    background-color: var(--dark-primary);
+    color: var(--dark-bg);
+}
+
+.light-mode .login-btn {
+    background-color: var(--light-primary);
+    color: var(--light-bg);
+}
+
+/* Hero section */
+.hero {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: color #dfdfdf;
+    background-size: cover;
+    padding: 2rem;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.dark-mode .cta-button {
+    background-color: var(--dark-primary);
+    color: var(--dark-bg);
+}
+
+.light-mode .cta-button {
+    background-color: var(--light-primary);
+    color: var(--light-bg);
+}
+
+/* Features section */
+.intro {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.feature-card {
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.dark-mode .feature-card {
+    background-color: var(--dark-secondary);
+}
+
+.light-mode .feature-card {
+    background-color: var(--light-secondary);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card i {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Examples section */
+.examples {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.example-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.example-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.example-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.example-card h3, .example-card p {
+    padding: 1rem;
+}
+
+/* CTA section */
+.cta {
+    padding: 5rem 2rem;
+    text-align: center;
+    background-size: cover;
+}
+
+.dark-mode .cta {
+    background: linear-gradient(#1e1e1e, #1e1e1e);
+    color: var(--dark-text);
+}
+
+.light-mode .cta {
+    background: linear-gradient(#dfdfdf, #dfdfdf);
+    color: var(--light-text);
+}
+
+/* Footer */
+footer {
+    padding: 3rem 2rem;
+}
+
+.dark-mode footer {
+    background-color: var(--dark-secondary);
+}
+
+.light-mode footer {
+    background-color: var(--light-secondary);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.footer-section ul {
+    list-style: none;
+}
+
+.footer-section a {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.3s;
+}
+
+.footer-section a:hover {
+    opacity: 0.8;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .example-cards {
+        grid-template-columns: 1fr;
+    }
+}

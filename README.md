@@ -1,96 +1,86 @@
 # 🔐 WindCloud - Secure Cloud Storage & Dashboard Platform
 
-WindCloud is a modern Flask-based web application that provides secure file storage, sharing capabilities, and an intuitive dashboard interface with advanced authentication features.
+WindCloud is a modern Flask-based web application built for secure file storage, efficient sharing, and an interactive dashboard experience. With advanced authentication features including two-factor authentication (2FA), a flexible card system, and intuitive file management, WindCloud is designed for both individual users and collaborative teams.
+
+---
 
 ## 🌟 Key Features
 
-### 🔒 Security & Authentication
-- **Secure Password Storage** with `bcrypt` hashing
-- **Two-Factor Authentication (2FA)** with Google Authenticator
-- **Session Management** with secure, configurable sessions
-- **Rate Limiting** to protect against brute-force attacks
-- **SQLite Database** for efficient data storage
-- **HTTPS Support** with secure cookie handling
-- **Cross-Site Request Forgery (CSRF) Protection**
-- **Input Validation & Sanitization**
+### Security & Authentication
+- **Secure Password Storage:** Uses bcrypt for hashed passwords.
+- **Two-Factor Authentication (2FA):** Integrated TOTP via Google Authenticator. Scan the QR code during registration and login.
+- **Session Management & CSRF Protection:** Secure sessions and tokens.
+- **Rate Limiting:** Prevents brute-force attacks.
+- **Input Validation & Sanitization:** Ensures data integrity.
 
-### 📊 Modern Dashboard
-- **Responsive Design** inspired by Google and Apple
-- **Dark/Light Mode** with local preference storage
-- **Grid and List Views** for cards
-- **Drag & Drop File Upload**
-- **Image Gallery** with previews
-- **File Management** for various formats (PDF, Word, etc.)
-- **Real-time Updates**
-- **Search & Filter Capabilities**
+### Modern Dashboard
+- **Responsive UI:** Designed with both grid and list views.
+- **Dark/Light Mode:** User preference stored locally.
+- **Drag & Drop File Upload:** Supports multiple file types and image previews.
+- **Interactive Card System:** Create, edit, delete, and share cards.
+- **Real-Time Updates & Search:** Quickly filter and sort your cards.
 
-### 🤝 Collaboration
-- **Card Sharing** with other users
-- **Granular Permissions** (Read/Edit)
-- **Email-based Sharing**
-- **Secure Access Control**
-- **Activity Tracking**
-- **Version History**
+### File Management & Sharing
+- **File & Image Galleries:** View and manage files via dedicated sections.
+- **Granular Sharing Options:** Share cards with read-only or edit permissions.
+- **Secure File Serving:** Files are stored and served securely from the uploads directory.
 
 ---
 
 ## 🚀 Installation
 
 ### Prerequisites
-- Python 3.8 or higher
-- pip (Python Package Manager)
+- Python 3.8+
+- pip
 - Git
 - SQLite3
-- Modern web browser with JavaScript enabled
 
-### Steps
+### Setup Steps
 
 1. **Clone Repository**
-```bash
-git clone https://github.com/MarsgameJu/WindCloud.git
-cd windcloud
-```
+   ```bash
+   git clone https://github.com/MarsgameJu/WindCloud.git
+   cd WindCloud
+   ```
 
 2. **Create Virtual Environment**
-```bash
-python -m venv venv
-# Windows:
-venv\Scripts\activate
-# macOS & Linux:
-source venv/bin/activate
-```
+   ```bash
+   python -m venv venv
+   # Windows:
+   venv\Scripts\activate
+   # macOS/Linux:
+   source venv/bin/activate
+   ```
 
 3. **Install Dependencies**
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-4. **Configure Settings**
-Create a `.env` file in the root directory and customize your settings:
-```env
-FLASK_APP=app.py
-FLASK_ENV=development
-SECRET_KEY=your-secure-secret-key
-SESSION_TYPE=filesystem
-RATE_LIMIT=100/day
-UPLOAD_FOLDER=uploads
-MAX_CONTENT_LENGTH=16777216  # 16MB max file size
-```
+4. **Configuration**
+   Create a `.env` file (or update `config.py`) with your settings:
+   ```env
+   FLASK_APP=app.py
+   FLASK_ENV=development
+   SECRET_KEY=your-secure-secret-key
+   SESSION_TYPE=filesystem
+   RATE_LIMIT=100/day
+   UPLOAD_FOLDER=uploads
+   MAX_CONTENT_LENGTH=16777216  # 16MB max file size
+   ```
+   _Alternatively, modify `config.py` accordingly._
 
-Or modify `config.py` directly:
-```python
-SECRET_KEY = "your-secure-secret-key"
-SESSION_TYPE = "filesystem"
-RATE_LIMIT = "100 per day"
-UPLOAD_FOLDER = "uploads"
-```
+5. **Database Initialization**
+   The application automatically creates necessary tables. For a fresh start, remove existing databases and run:
+   ```bash
+   python app.py
+   ```
 
-5. **Start Application**
-```bash
-python app.py
-```
-
-🌐 **Access:** [`http://127.0.0.1:5000`](http://127.0.0.1:5000)
+6. **Start the Application**
+   ```bash
+   python app.py
+   ```
+   Visit [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
 
@@ -98,216 +88,103 @@ python app.py
 
 ```
 WindCloud/
-├── database/               # Database files
-│   └── users.db            # SQLite database
-├── static/                 # Static files
-│   ├── style.css           # Base styling
+├── database/               # SQLite database and schema files
+├── static/                 # Static assets: stylesheets, scripts, images
+│   ├── style.css           # Global styles
 │   ├── dashboard.css       # Dashboard-specific styling
-│   ├── dashboard.js        # Dashboard functionality
-│   ├── flash-message.js    # Flash messages
-│   └── password-check.js   # Password validation
-├── templates/              # HTML templates
-│   ├── login.html          # Login page
-│   ├── register.html       # Registration
-│   ├── 2fa.html            # 2FA verification
-│   └── dashboard.html      # Main dashboard
-├── uploads/                # Uploaded files
-├── utils/                  # Helper functions
-│   ├── database.py         # Database connection
-│   └── security.py         # Security functions
-├── app.py                  # Main application
-├── config.py               # Configuration
-└── requirements.txt        # Dependencies
+│   ├── script.js           # General JS functions
+│   ├── dashboard.js        # Dashboard interactivity (cards, modals, uploads)
+│   ├── flash-message.js    # Flash messages handler
+│   └── password-check.js   # Password validation and strength checking
+├── templates/              # Jinja2 HTML templates
+│   ├── login.html          # User login
+│   ├── register.html       # User registration
+│   ├── 2fa.html            # Two-factor authentication
+│   └── dashboard.html      # Main dashboard with card system
+├── uploads/                # User-uploaded files
+├── utils/                  # Helper functions for database & security operations
+│   ├── database.py         
+│   └── security.py         
+├── app.py                  # Main Flask application
+├── config.py               # App configuration settings
+├── requirements.txt        # Python dependencies
+└── README.md               # Project documentation
 ```
-## 💡 Feature Details
 
-### Dashboard
-1. **Card Management**
-   - Create, edit, and delete cards
-   - Add titles and descriptions
-   - Upload files and images
-   - Switch between grid and list views
-   - Sort and filter capabilities
-   - Bulk operations support
+---
 
-2. **File Upload**
-   - Drag & drop support
-   - Multiple file upload
-   - Image previews
-   - Support for various file formats
-   - Progress indicators
-   - File validation
-   - Automatic file type detection
-
-3. **Sharing Features**
-   - Share cards
-   - Grant read or edit permissions
-   - File-level access control
-
-4. **User Interface**
-   - Responsive design
-   - Dark/Light mode
-   - Intuitive navigation
-   - Modern icons and animations
-   - Keyboard shortcuts
-   - Accessibility features
-   - Touch-friendly controls
-
-### Security
-1. **Authentication**
-   - Multi-step login process
-   - 2FA with Google Authenticator
-   - Secure password storage
-   - Password strength requirements
-   - Account lockout protection
-   - Login attempt monitoring
-
-2. **Access Control**
-   - Secure session management
-   - Rate limiting for API endpoints
-   - IP-based restrictions
-
-3. **Data Security**
-   - Encrypted file transfer
-   - Secure data storage
-   - Protected file sharing
-   - Data backup
-   - File integrity checks
-   - Secure file deletion
-
-## 🛠 API Endpoints
+## 📜 API Endpoints
 
 ### Authentication
-- `POST /login` - User login
+- **POST /login**
   - Parameters: `email`, `password`
-  - Returns: Session token
-- `POST /register` - New user registration
-  - Parameters: `username`, `email`, `password`
-- `POST /verify-2fa` - 2FA verification
-  - Parameters: `token`
-- `GET /logout` - User logout
+  - Flow: Validates credentials and proceeds to 2FA.
+- **POST /register**
+  - Parameters: `username`, `email`, `password`, `confirm-password`
+  - Flow: Registers user and prompts for 2FA setup.
+- **POST /verify-2fa**
+  - Parameters: `code`
+  - Flow: Validates the TOTP code.
 
-### Cards
-- `POST /api/cards` - Create new card
-  - Parameters: `title`, `description`
-- `PUT /api/cards/<id>` - Update card
-  - Parameters: `title`, `description`
-- `DELETE /api/cards/<id>` - Delete card
-- `POST /api/cards/<id>/files` - Upload files
-  - Parameters: `files[]`
-- `POST /api/cards/<id>/share` - Share card
-  - Parameters: `email`, `permission_level`
+### Cards Management
+- **POST /api/cards**
+  - Payload: `title`, `description`
+  - Creates a new card.
+- **PUT /api/cards/<id>**
+  - Payload: `title`, `description`
+  - Updates an existing card. Requires owner or 'write' permission.
+- **DELETE /api/cards/<id>**
+  - Deletes the specified card. Associated files are also removed.
 
-## 🧪 Testing (in Work)
+### File Handling
+- **POST /api/cards/<id>/files**
+  - Multipart form data for file(s).
+  - Supports drag & drop file uploads.
+- **DELETE /api/cards/<card_id>/files/<file_id>**
+  - Deletes a file from a card.
 
-### Running Tests
-```bash
-# Run all tests
-python -m pytest
+### Card Sharing
+- **POST /api/cards/<id>/share**
+  - Payload: `email`, `permission` (read/write)
+  - Grants the specified user permission to the card.
 
-# Run specific test file
-python -m pytest tests/test_auth.py
+---
 
-# Run with coverage report
-coverage run -m pytest
-coverage report
-```
-
-### Test Structure
-- `tests/`
-  - `test_auth.py` - Authentication tests
-  - `test_cards.py` - Card management tests
-  - `test_files.py` - File upload tests
-  - `test_api.py` - API endpoint tests
 
 ## 🤝 Contributing
 
-We welcome contributions! Please follow these steps:
+We welcome enhancements and bug fixes!
 
 1. **Fork the Repository**
-   - Create your own fork of the code
-   - Clone the fork locally
-
-2. **Create a Branch**
+2. **Create a Feature/Issue Branch**
    ```bash
    git checkout -b feature/your-feature-name
    ```
-
-3. **Make Changes**
-   - Write your code
-   - Add tests if applicable
-   - Update documentation
-
-4. **Commit Changes**
+3. **Make Changes & Add Tests**
+4. **Commit & Push**
    ```bash
    git add .
-   git commit -m "Add your meaningful commit message"
-   ```
-
-5. **Push to Fork**
-   ```bash
+   git commit -m "Describe your change"
    git push origin feature/your-feature-name
    ```
+5. **Submit a Pull Request**
 
-6. **Submit Pull Request**
-   - Create PR from your fork to our main branch
-   - Describe your changes in detail
-   - Reference any related issues
+Please follow PEP 8 guidelines and write clear commit messages.
 
-### Code Style
-- Follow PEP 8 guidelines
-- Use meaningful variable names
-- Add comments for complex logic
-- Keep functions focused and small
+---
 
 ## 📜 License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) file for details.
-
-## 🆘 Support & Troubleshooting
-
-### Common Issues
-
-1. **Database Errors**
-   - Ensure SQLite3 is installed
-   - Check database permissions
-   - Verify database path
-
-2. **Upload Issues**
-   - Check file size limits
-   - Verify upload directory permissions
-   - Ensure proper file types
-
-3. **Authentication Problems**
-   - Clear browser cache
-   - Check 2FA setup
-   - Verify email configuration
-
-### Getting Help
-
-1. **Documentation**
-   - Review [FAQ](/discussions/categories/q-a)
-   - Search existing issues
-
-2. **Community Support**
-   - Create GitHub issues
-   - Check Stack Overflow tags
-
-3. **Contributing**
-   - Submit bug reports
-   - Propose new features
-   - Share improvements
-
-## 📚 Additional Resources
-
-- [Security Guidelines](security)
-- **Coming Soon**
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🔄 Version History
-**Coming Soon**
+## 🆘 Support & Documentation
+
+- **FAQ & Issues:** Check our GitHub issues or discussions for common problems.
+- **Contact:** Raise an issue for bug reports or feature requests.
+- **Documentation:** More detailed guides and API references are coming soon.
 
 ---
 
-Built with ❤️ by Marsgame
+Built by Marsgame. Enjoy a secure and seamless cloud storage experience!
