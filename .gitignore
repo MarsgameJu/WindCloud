@@ -14,3 +14,5 @@ toDo.md
 # Ignore the venv Folder
 venv/
 
+# ignore the .env File
+.env

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session, url_for, f
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_session import Session
+from flask_mail import Mail, Message
 import sqlite3
 import bcrypt
 import pyotp
@@ -16,9 +17,12 @@ from io import BytesIO
 import base64
 import io
 from werkzeug.utils import secure_filename
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature  # new import
+import re  # Added for password validation
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 app.config.from_object(config)
+mail = Mail(app)
 
 # File upload configuration
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
@@ -39,6 +43,8 @@ Session(app)
 limiter = Limiter(key_func=get_remote_address, default_limits=[config.RATE_LIMIT])
 limiter.init_app(app)
 
+# Initialize serializer for password reset tokens
+serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
 
 def generate_qr_code(uri):
     img = qrcode.make(uri)
@@ -589,6 +595,114 @@ def uploaded_file(filename):
         print(f"Error serving file {filename}: {str(e)}")
         return {"error": "File not found"}, 404
 
+@app.route("/reset-password", methods=["GET", "POST"])
+def reset_request():
+    # ...existing code...
+    if request.method == "POST":
+        email = request.form["email"]
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
+        user = cursor.fetchone()
+        if user:
+            token = serializer.dumps(email, salt="password-reset-salt")
+            reset_link = url_for("reset_token", token=token, _external=True)
+            from flask_mail import Message  # ensure import at top if needed
+            msg = Message("Password Reset Request", 
+                          sender=app.config["MAIL_DEFAULT_SENDER"],
+                          recipients=[email])
+            # HTML styled email content
+            msg.html = f"""
+            <html>
+            <head>
+                <style>
+                    .container {{
+                        font-family: Arial, sans-serif;
+                        line-height: 1.6;
+                        color: #333;
+                        max-width: 600px;
+                        margin: auto;
+                        padding: 20px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        background-color: #f9f9f9;
+                    }}
+                    .header {{
+                        font-size: 24px;
+                        color: #3f9af4;
+                        margin-bottom: 20px;
+                    }}
+                    .message {{
+                        font-size: 16px;
+                    }}
+                    .button {{
+                        display: inline-block;
+                        padding: 12px 25px;
+                        margin-top: 20px;
+                        background-color: #3f9af4;
+                        color: #fff;
+                        text-decoration: none;
+                        border-radius: 5px;
+                        font-weight: bold;
+                    }}
+                    .footer {{
+                        font-size: 14px;
+                        color: #888;
+                        margin-top: 30px;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <h2 class="header">Password Reset Request - WindCloud</h2>
+                    <p class="message">Hello,</p>
+                    <p class="message">We received a request to reset your password. To update your credentials, please click the button below:</p>
+                    <p><a class="button" href="{reset_link}">Reset Password</a></p>
+                    <p class="message">If you did not request this, simply ignore this email. Your password remains unchanged.</p>
+                    <p class="footer">Best regards,<br>The WindCloud Team</p>
+                </div>
+            </body>
+            </html>
+            """
+            mail.send(msg)
+            flash("Password reset email sent. Please check your email.", "info")
+        else:
+            flash("Email not found.", "warning")
+        return redirect(url_for("login"))
+    return render_template("reset_password.html")
+
+# New route: Reset password using token
+@app.route("/reset-password/<token>", methods=["GET", "POST"])
+def reset_token(token):
+    try:
+        email = serializer.loads(token, salt="password-reset-salt", max_age=3600)
+    except SignatureExpired:
+        flash("The reset token has expired.", "danger")
+        return redirect(url_for("reset_request"))
+    except BadSignature:
+        flash("Invalid reset token.", "danger")
+        return redirect(url_for("reset_request"))
+    if request.method == "POST":
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
+        if password != confirm_password:
+            flash("Passwords do not match.", "danger")
+            return redirect(url_for("reset_token", token=token))
+
+        # Validate password: at least 8 chars, one uppercase letter, and one digit.
+        if len(password) < 8 or not re.search(r"[A-Z]", password) or not re.search(r"\d", password):
+            flash("Password must be at least 8 characters long, contain at least one uppercase letter and one digit.", "danger")
+            return redirect(url_for("reset_token", token=token))
+
+        hashed_pw = hash_password(password)
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("UPDATE users SET password = ? WHERE email = ?", (hashed_pw, email))
+        conn.commit()
+        flash("Password has been reset. Please log in.", "success")
+        return redirect(url_for("login"))
+    return render_template("new_password.html", token=token)
+
 @app.route("/logout")
 def logout():
     session.clear()
@@ -597,3 +711,4 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True)
+

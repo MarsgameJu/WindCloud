@@ -58,17 +58,17 @@ WindCloud is a modern Flask-based web application built for secure file storage,
    ```
 
 4. **Configuration**
-   Create a `.env` file (or update `config.py`) with your settings:
+   Create a `.env` file and update `config.py` with your settings:
    ```env
-   FLASK_APP=app.py
-   FLASK_ENV=development
-   SECRET_KEY=your-secure-secret-key
-   SESSION_TYPE=filesystem
-   RATE_LIMIT=5/minute
-   UPLOAD_FOLDER=uploads
-   MAX_CONTENT_LENGTH=16777216  # 16MB max file size
+   MAIL_SERVER=smtp.example.com
+   MAIL_PORT=587
+   MAIL_USE_TLS=True
+   MAIL_USERNAME=your-email@example.com
+   MAIL_PASSWORD=your-email-password
    ```
-   _Alternatively, modify `config.py` accordingly._
+   [How to Create the App-password](https://support.google.com/accounts/answer/185833?hl=en)
+   
+   Alternatively, modify `config.py` accordingly.
 
 5. **Database Initialization**
    The application automatically creates necessary tables. For a fresh start, remove existing databases and run:
@@ -185,6 +185,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [License](info_doc/LICENSE)
 - [Security Policy](info_doc/SECURITY.md)
 - [Changelog](info_doc/CHANGELOG.md)
+- [HowTo Email PW](https://support.google.com/accounts/answer/185833?hl=en)
 
 
 ---
