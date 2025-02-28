@@ -331,7 +331,6 @@ nav {
     backdrop-filter: blur(12px);
     border: 1px solid var(--dark-border);
     box-shadow: var(--dark-shadow-sm);
-    padding: 2.5rem;
     border-radius: 20px;
     transition: all var(--transition-normal);
 }
@@ -415,8 +414,8 @@ nav {
 }
 
 .showcase-image {
-    width: 107%;
-    height: 465px;
+    width: 100%;
+    height: auto;
     object-fit: cover;
     transition: transform var(--transition-slow);
 }
@@ -738,14 +737,29 @@ h1, h2, h3, h4 {
 /* Stats Enhancement */
 .hero-stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);  /* Drei Spalten nebeneinander */
     gap: 2rem;
     margin-top: 4rem;
     padding: 2rem;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 20px;
     backdrop-filter: blur(12px);
-}
+  }
+  
+  /* Für kleinere Bildschirme, z. B. ab 768px Breite (Tablets und Handys) */
+  @media (max-width: 768px) {
+    .hero-stats {
+      grid-template-columns: repeat(2, 1fr);  /* Zwei Spalten */
+    }
+  }
+  
+  /* Für sehr kleine Bildschirme (Handys) */
+  @media (max-width: 480px) {
+    .hero-stats {
+      grid-template-columns: 1fr;  /* Eine Spalte (alle Elemente untereinander) */
+    }
+  }
+  
 
 .stat {
     position: relative;

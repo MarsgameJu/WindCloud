@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - SafeLogin</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/dashboard.css') }}">
 </head>
 <body class="dark-mode">
     <header class="dashboard-header">
@@ -298,7 +298,7 @@
     </div>
 
     <!-- Include flash-message.js before dashboard.js -->
-    <script src="{{ url_for('static', filename='flash-message.js') }}"></script>
-    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='/js/flash-message.js') }}"></script>
+    <script src="{{ url_for('static', filename='/js/dashboard.js') }}"></script>
 </body>
 </html>

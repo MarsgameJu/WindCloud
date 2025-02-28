@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="{{ url_for('static', filename='flash-message.js') }}"></script>
-    <script src="{{ url_for('static', filename='password-check.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
@@ -39,6 +37,7 @@
         <p>No account yet? <a href="{{ url_for('register') }}">Register</a></p>
         <p><a href="/reset-password">Forgot your password?</a></p>
     </div>
-
+    <script src="{{ url_for('static', filename='/js/flash-message.js') }}"></script>
+    <script src="{{ url_for('static', filename='/js/password-check.js') }}"></script>
 </body>
 </html>
