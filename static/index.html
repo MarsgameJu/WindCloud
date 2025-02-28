@@ -12,13 +12,14 @@
     <header>
         <nav>
             <div class="logo">
-                <img src="/assets/logo.svg" alt="WindCloud Logo">
+                <img src="/assets/logo.svg" alt="WindCloud Logo" class="logo-img">
             </div>
             <div class="nav-controls">
-                <button id="theme-toggle" class="theme-toggle">
-                    <i class="fas fa-moon"></i>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
                 </button>
-                <a href="/login" class="login-btn">Login</a>
+                <a href="/register" class="secondary-button">Sign Up</a>
+                <a href="/login" class="primary-button">Login</a>
             </div>
         </nav>
     </header>
@@ -26,55 +27,129 @@
     <main>
         <section class="hero">
             <div class="hero-content">
-                <h1>Secure Cloud Storage Made Simple</h1>
-                <p class="subtitle">Store, organize, and share your files with ease</p>
-                <a href="/register" class="cta-button">Get Started</a>
+                <span class="badge">Secure & Modern</span>
+                <h1>Cloud Storage</h1>
+                <p class="subtitle">Experience seamless file management with top-tier security and a user-friendly interface.</p>
+                <div class="cta-group">
+                    <a href="/register" class="primary-button">Start Free Trial</a>
+                    <a href="#features" class="secondary-button">
+                        <i class="fas fa-play-circle"></i>
+                        See How It Works
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">256-bit</span>
+                        <span class="stat-label">Encryption</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">2FA</span>
+                        <span class="stat-label">Security</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">Real-time</span>
+                        <span class="stat-label">Sync</span>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="intro" class="intro">
-            <h2>Why WindCloud?</h2>
+        <section id="features" class="features">
+            <div class="section-header">
+                <h2>Experience the Future of Storage</h2>
+                <p class="features-description">
+                    Discover a comprehensive suite of tools designed for modern storage needs
+                </p>
+            </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <i class="fas fa-shield-alt"></i>
-                    <h3>Secure Storage</h3>
-                    <p>Your data is protected with state-of-the-art encryption and two-factor authentication.</p>
+                    <h3>Advanced Security</h3>
+                    <p>Protect your data with encryption and two-factor authentication for enhanced security.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-project-diagram"></i>
+                    <h3>Smart Organization</h3>
+                    <p>Intuitive card system for better file management and collaboration.</p>
                 </div>
                 <div class="feature-card">
                     <i class="fas fa-share-alt"></i>
                     <h3>Easy Sharing</h3>
-                    <p>Share files and collaborate with others seamlessly through our intuitive interface.</p>
+                    <p>Seamlessly share files and collaborate with customizable permission settings</p>
                 </div>
                 <div class="feature-card">
-                    <i class="fas fa-columns"></i>
-                    <h3>Card System</h3>
-                    <p>Organize your content with our unique card system for better file management.</p>
+                    <i class="fas fa-sync"></i>
+                    <h3>Real-time Updates</h3>
+                    <p>Automatically sync your files across all devices, ensuring youre always up to date.</p>
                 </div>
             </div>
         </section>
 
-        <section class="examples">
-            <h2>Features</h2>
-            <div class="example-cards">
-                <div class="example-card">
-                    <img src="/assets/dashboard.jpg" alt="WindCloud Dashboard" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'400\' viewBox=\'0 0 600 400\'><rect width=\'100%\' height=\'100%\' fill=\'%232196f3\'/><text x=\'50%\' y=\'50%\' font-size=\'24\' fill=\'white\' text-anchor=\'middle\'>Dashboard Preview</text></svg>'">
-                    <h3>Modern Dashboard</h3>
-                    <p>Access all your files and cards from our clean, intuitive dashboard.</p>
-                </div>
-                <div class="example-card">
-                    <img src="/assets/cards.jpg" alt="Card Management" onerror="this.src='data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'400\' viewBox=\'0 0 600 400\'><rect width=\'100%\' height=\'100%\' fill=\'%232196f3\'/><text x=\'50%\' y=\'50%\' font-size=\'24\' fill=\'white\' text-anchor=\'middle\'>Card Management</text></svg>'">
-                    <h3>Card Management</h3>
-                    <p>Organize your files with our flexible card system for better overview.</p>
+        <section class="showcase">
+            <div class="section-header">
+                <h2>Streamlined Experience</h2>
+                <p class="showcase-description">
+                    Our intuitive interface makes file management effortless and enjoyable
+                </p>
+            </div>
+            <div class="showcase-content">
+                <div class="showcase-grid">
+                    <div class="showcase-item">
+                        <img src="/assets/dashboard.jpg" alt="Dashboard Preview" class="showcase-image">
+                        <div class="showcase-overlay">
+                            <h3>Intuitive Dashboard</h3>
+                            <p>Drag-and-drop interface with real-time updates</p>
+                        </div>
+                    </div>
+                    <div class="showcase-item">
+                        <img src="/assets/cards.jpg" alt="Card Management" class="showcase-image">
+                        <div class="showcase-overlay">
+                            <h3>Card Management</h3>
+                            <p>Organize files with our flexible card system</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <section class="cta">
-            <h2>Ready to Get Started?</h2>
-            <p>Join WindCloud today and experience better file organization!</p>
-            <a href="/register" class="cta-button">Register for Free</a>
         </section>
     </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section brand">
+                <div class="footer-logo">
+                    <span>WindCloud</span>
+                </div>
+                <p>Secure cloud storage for the modern era. Experience the future of file management.</p>
+                <div class="social-links">
+                    <a href="https://github.com/MarsgameJu/WindCloud" class="social-link" aria-label="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-section links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="https://github.com/MarsgameJu">About Us</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="mailto:coming-soon@mail.com">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="/privacy">Privacy Policy</a></li><!--coming Soon-->
+                    <li><a href="/terms">Terms of Service</a></li><!--coming Soon-->
+                    <li><a href="/Security">Security</a></li>     <!--coming Soon-->
+                </ul>
+            </div>
+        </div>
+    </footer>
     <script src="/script.js"></script>
 </body>
 </html>

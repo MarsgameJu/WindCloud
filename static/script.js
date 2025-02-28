@@ -1,28 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
-    
-    // Check for saved theme preference or use default (dark)
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    body.classList.add(`${savedTheme}-mode`);
-    updateThemeIcon(savedTheme);
-    
-    themeToggle.addEventListener('click', () => {
-        const isDark = body.classList.contains('dark-mode');
-        const newTheme = isDark ? 'light' : 'dark';
-        
-        body.classList.remove(`${isDark ? 'dark' : 'light'}-mode`);
-        body.classList.add(`${newTheme}-mode`);
-        
-        localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
-    });
-    
-    function updateThemeIcon(theme) {
-        const icon = themeToggle.querySelector('i');
-        icon.className = theme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+    const icon = themeToggle.querySelector('i');
+
+    function updateThemeIcon(isDark) {
+        icon.classList.remove('fa-sun', 'fa-moon');
+        if (isDark) {
+            icon.classList.add('fa-sun');
+        } else {
+            icon.classList.add('fa-moon');
+        }
     }
-    
+
+    themeToggle.addEventListener('click', () => {
+        const isDark = document.body.classList.contains('dark-mode');
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+        
+        updateThemeIcon(!isDark);
+        localStorage.setItem('theme', !isDark ? 'dark' : 'light');
+    });
+
+    // Check saved preference
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.body.classList.remove('dark-mode', 'light-mode');
+    document.body.classList.add(savedTheme === 'dark' ? 'dark-mode' : 'light-mode');
+    updateThemeIcon(savedTheme === 'dark');
+
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
