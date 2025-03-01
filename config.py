@@ -38,7 +38,7 @@ MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
 MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER')
 
 # Error handling configuration
-DEBUG = True  # Set to True only in development
+DEBUG = False  # Set to True only in development
 PROPAGATE_EXCEPTIONS = True
 TRAP_HTTP_EXCEPTIONS = True
 TRAP_BAD_REQUEST_ERRORS = True
