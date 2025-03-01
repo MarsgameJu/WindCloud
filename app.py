@@ -409,7 +409,7 @@ def manage_card(card_id):
             except Exception as e:
                 conn.rollback()
                 print(f"Error during card deletion: {str(e)}")
-                return {"error": f"Database error: {str(e)}"}, 500
+                app.logger.error(f"Database error: {str(e)}")
         elif request.method == "PUT":
             data = request.get_json()
             title = data.get("title")

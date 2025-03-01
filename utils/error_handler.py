@@ -50,5 +50,5 @@ class ErrorHandler:
             }
 
         if request.is_json:
-            return jsonify(error_info), 500
+            return jsonify("error_info"), 500
         return render_template('error.html', error=error_info), 500
