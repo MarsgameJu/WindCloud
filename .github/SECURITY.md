@@ -9,7 +9,8 @@ The following versions are secure:
 | 0.1.0     | :x:                |
 | 1.0.0     | :x:                |
 | 1.1.0     | :x:                |
-| 1.2.0     | :white_check_mark: |
+| 1.2.0     | :x:                |
+| 1.3.0     | :white_check_mark: |
 
 ## Reporting a Vulnerability
 

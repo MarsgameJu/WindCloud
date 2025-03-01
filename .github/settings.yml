@@ -1,7 +1,0 @@
-repository:
-  files:
-    - path: info_doc/LICENSE
-    - path: info_doc/CODE_OF_CONDUCT.md
-    - path: info_doc/CONTRIBUTING.md
-    - path: info_doc/SECURITY.md
-    - path: info_doc/CHANGELOG.md

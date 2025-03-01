@@ -180,11 +180,11 @@ Please follow PEP 8 guidelines and write clear commit messages.
 ## 📜 Other important things
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-- [Code of Conduct](info_doc/CODE_OF_CONDUCT.md)
-- [Contributing Guidelines](info_doc/CONTRIBUTING.md)
-- [License](info_doc/LICENSE)
-- [Security Policy](info_doc/SECURITY.md)
-- [Changelog](info_doc/CHANGELOG.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [License](LICENSE)
+- [Security Policy](/.github/SECURITY.md)
+- [Changelog](CHANGELOG.md)
 - [HowTo Email PW](https://support.google.com/accounts/answer/185833?hl=en)
 
 
