@@ -1,28 +1,26 @@
+import base64
+import bcrypt
+import config
+import io
+import os
+import pyotp
+import qrcode
+import re
+import sqlite3
+import time
+import urllib.parse
+from io import BytesIO
 from flask import Flask, render_template, request, redirect, session, url_for, flash, send_file, send_from_directory
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_session import Session
 from flask_mail import Mail, Message
-import sqlite3
-import bcrypt
-import pyotp
+from flask_session import Session
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+from werkzeug.utils import secure_filename
 from utils.database import get_db
 from utils.security import hash_password, verify_password, generate_totp_secret, get_totp_uri, verify_totp
-import config
-import time
-import qrcode
-import os
-import urllib.parse
-from io import BytesIO
-import base64
-import io
-from werkzeug.utils import secure_filename
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
-import re
-import logging
 
 app = Flask(__name__, static_url_path='', static_folder='static')
-logging.basicConfig(level=logging.ERROR, filename='app_errors.log', format='%(asctime)s %(levelname)s %(message)s')
 app.config.from_object(config)
 mail = Mail(app)
 
@@ -586,18 +584,17 @@ def share_card(card_id):
 
     except Exception as e:
         conn.rollback()
-        logging.error(f"Error sharing card {card_id}: {str(e)}")
-        return {"error": "An internal error has occurred."}, 500
-    
+        return {"error": str(e)}, 500
+
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
     """Serve uploaded files using send_from_directory"""
     try:
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=False)
     except Exception as e:
-        logging.error(f"Error serving file {filename}: {str(e)}")
-        return {"error": "An internal error has occurred."}, 500
-    
+        print(f"Error serving file {filename}: {str(e)}")
+        return {"error": "File not found"}, 404
+
 @app.route("/reset-password", methods=["GET", "POST"])
 def reset_request():
     # ...existing code...
