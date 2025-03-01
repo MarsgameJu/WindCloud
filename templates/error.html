@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - WindCloud</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="error-container">
+        <h1>{% if error.code %}Error {{ error.code }}{% else %}Error{% endif %}</h1>
+        <div class="error-message">
+            {% if error.message %}
+                {{ error.message }}
+            {% else %}
+                An unexpected error occurred. Please try again later.
+            {% endif %}
+        </div>
+        {% if config['DEBUG'] and error.traceback %}
+            <div class="error-details">
+                <pre>{{ error.traceback }}</pre>
+            </div>
+        {% endif %}
+        <div class="error-actions">
+            <a href="/" class="btn">Return to Home</a>
+        </div>
+    </div>
+</body>
+</html>

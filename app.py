@@ -19,10 +19,19 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 from werkzeug.utils import secure_filename
 from utils.database import get_db
 from utils.security import hash_password, verify_password, generate_totp_secret, get_totp_uri, verify_totp
+from utils.error_handler import ErrorHandler
 
 app = Flask(__name__, static_url_path='', static_folder='static')
 app.config.from_object(config)
+
+# Create session directory if it doesn't exist
+if not os.path.exists(app.config['SESSION_FILE_DIR']):
+    os.makedirs(app.config['SESSION_FILE_DIR'])
+
+# Initialize extensions
+Session(app)
 mail = Mail(app)
+error_handler = ErrorHandler(app, debug_mode=app.config.get('DEBUG', False))
 
 # File upload configuration
 UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'uploads')
@@ -39,7 +48,6 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 # Enable Session & Rate-Limiting
-Session(app)
 limiter = Limiter(key_func=get_remote_address, default_limits=[config.RATE_LIMIT])
 limiter.init_app(app)
 
@@ -57,6 +65,9 @@ def generate_qr_code(uri):
 # Database connection and insert function
 def get_db():
     db_path = os.path.join(os.path.dirname(__file__), 'database', 'users.db')
+    if not os.path.exists(db_path):
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
+        init_db()
     conn = sqlite3.connect(db_path)
     return conn
 
@@ -126,10 +137,6 @@ def init_db():
         with app.open_resource('schema.sql', mode='r') as f:
             db.cursor().executescript(f.read())
         db.commit()
-
-# Initialize the database if it doesn't exist
-if not os.path.exists('database.db'):
-    init_db()
 
 @app.route("/")
 def index():
@@ -311,6 +318,9 @@ def dashboard():
 @app.route("/api/cards", methods=["POST"])
 def create_card():
     """Create a new card"""
+    if "user_id" not in session:
+        return {"error": "Not authenticated"}, 401
+
     data = request.get_json()
     title = data.get("title")
     description = data.get("description")
@@ -318,6 +328,7 @@ def create_card():
     if not title:
         return {"error": "Title is required"}, 400
 
+    conn = None
     try:
         conn = get_db()
         cursor = conn.cursor()
@@ -328,7 +339,6 @@ def create_card():
         card_id = cursor.lastrowid
         conn.commit()
 
-        # Return the created card
         cursor.execute("SELECT * FROM cards WHERE id = ?", (card_id,))
         card = cursor.fetchone()
         return {
@@ -338,8 +348,10 @@ def create_card():
             "created_at": card[4]
         }
     except Exception as e:
-        conn.rollback()
-        return {"error": str(e)}, 500
+        if conn:
+            conn.rollback()
+        app.logger.error(f"Error creating card: {str(e)}")
+        return {"error": "An error occurred while creating the card"}, 500
 
 @app.route("/api/cards/<int:card_id>", methods=["PUT", "DELETE"])
 def manage_card(card_id):
@@ -415,7 +427,8 @@ def manage_card(card_id):
 
     except Exception as e:
         conn.rollback()
-        return {"error": str(e)}, 500
+        app.logger.error(f"Error managing card {card_id}: {str(e)}")
+        return {"error": "An error occurred while managing the card"}, 500
 
 @app.route("/api/cards/<int:card_id>/files", methods=["POST"])
 def upload_files(card_id):
@@ -481,8 +494,8 @@ def upload_files(card_id):
                         "is_image": file_type == "image"
                     })
                 except sqlite3.Error as e:
-                    print(f"Database error: {str(e)}")  # Debug log
-                    raise
+                    app.logger.error(f"Database error while uploading files: {str(e)}")
+                    return {"error": "An error occurred while saving file information"}, 500
 
         conn.commit()
         print(f"Successfully uploaded {len(uploaded_files)} files")  # Debug log
@@ -492,7 +505,8 @@ def upload_files(card_id):
         print(f"Error in upload_files: {str(e)}")  # Debug log
         if conn:
             conn.rollback()
-        return {"error": str(e)}, 500
+        app.logger.error(f"Error uploading files: {str(e)}")
+        return {"error": "An error occurred while uploading files"}, 500
 
 @app.route("/api/cards/<int:card_id>/files/<int:file_id>", methods=["DELETE"])
 def delete_file(card_id, file_id):
@@ -534,7 +548,8 @@ def delete_file(card_id, file_id):
 
     except Exception as e:
         conn.rollback()
-        return {"error": str(e)}, 500
+        app.logger.error(f"Error deleting file {file_id} from card {card_id}: {str(e)}")
+        return {"error": "An error occurred while deleting the file"}, 500
 
 @app.route("/api/cards/<int:card_id>/share", methods=["POST"])
 def share_card(card_id):
@@ -584,7 +599,8 @@ def share_card(card_id):
 
     except Exception as e:
         conn.rollback()
-        return {"error": str(e)}, 500
+        app.logger.error(f"Error sharing card {card_id}: {str(e)}")
+        return {"error": "An error occurred while sharing the card"}, 500
 
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
@@ -592,7 +608,7 @@ def uploaded_file(filename):
     try:
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=False)
     except Exception as e:
-        print(f"Error serving file {filename}: {str(e)}")
+        app.logger.error(f"Error serving file {filename}: {str(e)}")
         return {"error": "File not found"}, 404
 
 @app.route("/reset-password", methods=["GET", "POST"])

@@ -88,31 +88,42 @@ WindCloud is a modern Flask-based web application built for secure file storage,
 
 ```
 WindCloud/
-├── .github/                # Holds issue templates
-├── database/               # SQLite database and schema files
-├── static/                 # Static assets: stylesheets, scripts
-│   ├── assets/             # Images for Landing Page
-│   ├── style.css           # Global styles
-│   ├── dashboard.css       # Dashboard-specific styling
-│   ├── script.js           # General JS functions
-│   ├── dashboard.js        # Dashboard interactivity (cards, modals, uploads)
-│   ├── flash-message.js    # Flash messages handler
-│   ├── password-check.js   # Password validation and strength checking
-│   ├── index.css           # Sytle for index.html
-│   └── index.html          # Landing page
-├── templates/              # Jinja2 HTML templates
-│   ├── login.html          # User login
-│   ├── register.html       # User registration
-│   ├── 2fa.html            # Two-factor authentication
-│   └── dashboard.html      # Main dashboard with card system
-├── uploads/                # User-uploaded files
-├── utils/                  # Helper functions for database & security operations
-│   ├── database.py         # Strucure and Init Database
-│   └── security.py         # ensures securoty for Webaplication
-├── app.py                  # Main Flask application
-├── config.py               # App configuration settings
-├── requirements.txt        # Python dependencies
-└── README.md               # Project documentation
+├── .github/   
+│   ├── ISSUE_TEMPLATE/           # Templates for GitHub issue reporting
+│   └── SECURITY.md               # Security policy and vulnerability reporting guidelines
+├── database/                     # SQLite database 
+├── static/                       # Static assets
+│   ├── assets/                   # Images for Landing Page
+│   ├── css/ 
+│   |    ├── dashboard.css        # Dashboard-specific Styling
+│   |    ├── style.css            # Global styles
+│   |    ├── index.css            # Style for index.html
+│   ├── js/     
+│   |    ├── script.js            # General JS functions
+│   |    ├── dashboard.js         # Dashboard interactivity (cards, modals, uploads)
+│   |    ├── flash-message.js     # Flash messages handler
+│   |    ├── password-check.js    # Password validation and strength checking                  
+│   └── index.html                # Landing page
+├── templates/                    # Jinja2 HTML templates
+│   ├── login.html                # User login
+│   ├── register.html             # User registration
+│   ├── 2fa.html                  # Two-factor authentication
+│   ├── error.html                # Custom error page templates
+│   └── dashboard.html            # Main dashboard with card System
+├── uploads/                      # User-uploaded files
+├── utils/                        # Helper functions for database & security operations
+│   ├── database.py               # Structure and Init Database
+│   ├── error_handler.py          # Custom error handling and logging
+│   └── security.py               # Ensures security for Web application
+├── app.py                        # Main Flask application
+├── config.py                     # App configuration settings
+├── requirements.txt              # Python dependencies
+├── .gitignore                    # Specifies which files Git should ignore
+├── CODE_OF_CONDUCT.md            # Project community guidelines and behavior
+├── CONTRIBUTING.md               # Guidelines for contributing to the project
+├── LICENSE                       # MIT License terms and conditions
+├── Schema.sql                    # Database schema definitions
+└── README.md                     # Project documentation
 ```
 
 ---
