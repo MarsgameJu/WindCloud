@@ -17,10 +17,12 @@ from io import BytesIO
 import base64
 import io
 from werkzeug.utils import secure_filename
-from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature  # new import
-import re  # Added for password validation
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
+import re
+import logging
 
 app = Flask(__name__, static_url_path='', static_folder='static')
+logging.basicConfig(level=logging.ERROR, filename='app_errors.log', format='%(asctime)s %(levelname)s %(message)s')
 app.config.from_object(config)
 mail = Mail(app)
 
@@ -584,17 +586,18 @@ def share_card(card_id):
 
     except Exception as e:
         conn.rollback()
-        return {"error": str(e)}, 500
-
+        logging.error(f"Error sharing card {card_id}: {str(e)}")
+        return {"error": "An internal error has occurred."}, 500
+    
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
     """Serve uploaded files using send_from_directory"""
     try:
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=False)
     except Exception as e:
-        print(f"Error serving file {filename}: {str(e)}")
-        return {"error": "File not found"}, 404
-
+        logging.error(f"Error serving file {filename}: {str(e)}")
+        return {"error": "An internal error has occurred."}, 500
+    
 @app.route("/reset-password", methods=["GET", "POST"])
 def reset_request():
     # ...existing code...
@@ -710,5 +713,5 @@ def logout():
     return redirect(url_for("login"))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
 
